@@ -1,0 +1,20 @@
+<div class="some-container-with-large-dimensions" ngFlowchartCanvas>
+</div>
+
+<div class="palette">
+    <div *ngFor="let item of items" [ngFlowchartStep]="{
+      template: stepContent,  
+      type: item.type, 
+      data: item.data  
+    }">
+        <span>{{item.name}}</span>
+    </div>
+</div>
+
+<ng-template #stepContent let-data>
+  <div class="step"
+    (click)="onDelete(data.id)"
+  >
+    <span>{{ data.data.name }}</span>
+  </div>
+</ng-template>
