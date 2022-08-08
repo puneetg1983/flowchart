@@ -3,14 +3,18 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FlowchartComponent } from './flowchart/flowchart.component';
+import { NgFlowchartModule } from '@joelwenzel/ng-flowchart';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    FlowchartComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    NgFlowchartModule
   ],
   providers: [],
   bootstrap: [AppComponent]
