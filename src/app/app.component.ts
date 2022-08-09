@@ -4,7 +4,8 @@ import {
   NgFlowchartStepRegistry,
   NgFlowchart
 } from '@joelwenzel/ng-flowchart';
-import { HttpClient } from '@angular/common/http'; 
+import { HttpClient } from '@angular/common/http';
+import { workflow, workflowNode, workflowNodeData } from './models/workflowNode';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,15 @@ export class AppComponent {
   @ViewChild('normalStep')
   normalStepTemplate: TemplateRef<any>;
 
+  @ViewChild('conditionStep')
+  conditionStepTemplate: TemplateRef<any>;
+
+  @ViewChild('ifTrueStep')
+  ifTrueTemplate: TemplateRef<any>;
+
+  @ViewChild('ifFalseStep')
+  ifFalseTemplate: TemplateRef<any>;
+
   @ViewChild(NgFlowchartCanvasDirective)
   canvas: NgFlowchartCanvasDirective;
 
@@ -36,8 +46,12 @@ export class AppComponent {
   ngAfterViewInit() {
     this.stepRegistry.registerStep('sample-step', this.normalStepTemplate);
     this.stepRegistry.registerStep('do-action', this.normalStepTemplate);
+    this.stepRegistry.registerStep('detector', this.normalStepTemplate);
     this.stepRegistry.registerStep('notification', this.normalStepTemplate);
     this.stepRegistry.registerStep('log', this.normalStepTemplate);
+    this.stepRegistry.registerStep('condition', this.conditionStepTemplate);
+    this.stepRegistry.registerStep('iftrue', this.ifTrueTemplate);
+    this.stepRegistry.registerStep('iffalse', this.ifFalseTemplate);
     this.showUpload();
   }
 
@@ -50,9 +64,19 @@ export class AppComponent {
   }
 
   showUpload() {
-    this.http.get("./assets/mydata.json").subscribe(data =>{
-      this.canvas.getFlow().upload(data);
-    });
+    let wf = new workflow();
+    let wfNode = new workflowNode();
+    wfNode.type = "detector";
+    wfNode.data = new workflowNodeData();
+    wfNode.data.name = "Detector1";
+    wfNode.children = [];
+
+    wf.root = wfNode;
+    this.canvas.getFlow().upload(wf);
+
+    // this.http.get("./assets/mydata.json").subscribe(data => {
+    //   this.canvas.getFlow().upload(data);
+    // });
   }
 
   showFlowData() {
@@ -62,8 +86,8 @@ export class AppComponent {
     x.document.open();
     x.document.write(
       '<html><head><title>Flowchart Json</title></head><body><pre>' +
-        json +
-        '</pre></body></html>'
+      json +
+      '</pre></body></html>'
     );
     x.document.close();
   }
@@ -92,4 +116,84 @@ export class AppComponent {
       .getStep(id)
       .destroy(true);
   }
+
+  addCondition(id) {
+    let wfNode = new workflowNode();
+    let wfIfTrueNode = new workflowNode();
+    let wfIfFalseNode = new workflowNode();
+
+    wfIfTrueNode.type = "iftrue";
+    wfIfFalseNode.type = "iffalse";
+
+    wfNode.children = [];
+    wfNode.children.push(wfIfTrueNode);
+    wfNode.children.push(wfIfFalseNode);
+
+    let dataNode = new workflowNodeData();
+    let ifDataNode = new workflowNodeData();
+    ifDataNode.name = "iftrue";
+
+    let elseDataNode = new workflowNodeData();
+    elseDataNode.name = "iffalse";
+
+    dataNode.name = "some-condition";
+    let currentNode = this.canvas.getFlow().getStep(id);
+    let condtionNode = currentNode.addChild({
+      template: this.conditionStepTemplate,
+      type: 'condition',
+      data: dataNode
+    }, {
+      sibling: true
+    });
+
+    condtionNode.then((addedNode) => {
+      addedNode.addChild({
+        template: this.ifTrueTemplate,
+        type: 'iftrue',
+        data: ifDataNode
+      }, {
+        sibling: true
+      });
+
+      addedNode.addChild({
+        template: this.ifFalseTemplate,
+        type: 'iffalse',
+        data: elseDataNode
+      }, {
+        sibling: true
+      });
+    });
+
+  }
+
+  addDetector(id: string) {
+    let dataNode = this.getNewDetectorNode("Detector1");
+    let currentNode = this.canvas.getFlow().getStep(id);
+    currentNode.addChild({
+      template: this.normalStepTemplate,
+      type: 'detector',
+      data: dataNode
+    }, {
+      sibling: true
+    });
+  }
+
+  getNewWorkFlowDataNode(name: string): workflowNodeData {
+    let wfNodeData = new workflowNodeData();
+    wfNodeData.name = name;
+    return wfNodeData;
+  }
+
+  getNewDetectorNode(detectorId: string): workflowNodeData {
+    return this.getNewWorkFlowDataNode(detectorId);
+  }
+
+  isDisabled(id: string) {
+    if (id === null || this.canvas.getFlow().getStep(id) == null || this.canvas.getFlow().getStep(id).children === null) {
+      return false;
+    }
+
+    return this.canvas.getFlow().getStep(id).children.length > 0;
+  }
+
 }

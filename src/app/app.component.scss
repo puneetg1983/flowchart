@@ -2,6 +2,10 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: sans-serif;
+}
+
 main {
     display: flex;
     height: 100vh;
@@ -39,8 +43,8 @@ section {
 }
 
 section .wide {
-        width: 100%;
-    }
+    width: 100%;
+}
 
 .sub-section {
     padding: 0.5em 0;
@@ -56,7 +60,53 @@ select {
     box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
     border-radius: 4px;
     min-width: 12em;
-    height: 4em;
+    height: 10em;
+}
+
+.condition {
+    background: white;
+    box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
+    min-width: 12em;
+    height: 5em;
+}
+
+.choose {
+    padding: 1em;
+    height: 10em;
+}
+
+.iftrue {
+    border: 1px solid green;
+}
+
+.iffalse {
+    border: 1px solid red;
+}
+
+.msla-card-title-group {
+    display: flex;
+    overflow: hidden;
+    flex: 1 1 auto;
+    align-items: center;
+    cursor: pointer;
+}
+
+.msla-card-header-title-view {
+    cursor: pointer;
+    color: #000;
+    overflow: hidden;
+    outline: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: inherit;
+    padding-left: 10px;
+    display: flex;
+}
+
+.msla-image-header {
+    width: 23px;
+    height: 23px;
+    display: inline-block;
 }
 
 div#canvas[disabled="true"] {

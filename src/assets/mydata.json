@@ -3,7 +3,7 @@
     "id": "s1608918280530",
     "type": "sample-step",
     "data": {
-      "name": "Do Action",
+      "name": "InvokeDetector 1",
       "inputs": [
         {
           "name": "ACTION",
@@ -16,7 +16,65 @@
         "id": "s1608918283650",
         "type": "do-action",
         "data": {
-          "name": "Do Action",
+          "name": "InvokeDetector 2.0",
+          "inputs": [
+            {
+              "name": "ACTION",
+              "value": null
+            }
+          ]
+        },
+        "children": [
+          {
+            "id": "s1608918283655",
+            "type": "condition",
+            "data": {
+              "name": "condition",
+              "inputs": [
+                {
+                  "name": "ACTION",
+                  "value": null
+                }
+              ]
+            },
+            "children": [
+              {
+                "id": "s1608918283656",
+                "type": "iftrue",
+                "data": {
+                  "name": "iftrue",
+                  "inputs": [
+                    {
+                      "name": "ACTION",
+                      "value": null
+                    }
+                  ]
+                },
+                "children": []
+              },
+              {
+                "id": "s1608918283656",
+                "type": "iffalse",
+                "data": {
+                  "name": "iffalse",
+                  "inputs": [
+                    {
+                      "name": "ACTION",
+                      "value": null
+                    }
+                  ]
+                },
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "s1608918283651",
+        "type": "do-action",
+        "data": {
+          "name": "InvokeDetector 2.1",
           "inputs": [
             {
               "name": "ACTION",
@@ -25,37 +83,6 @@
           ]
         },
         "children": []
-      },
-      {
-        "id": "s1608918285174",
-        "type": "do-action",
-        "data": {
-          "name": "Notification",
-          "type": "notification",
-          "inputs": [
-            {
-              "name": "Address",
-              "value": "sample.email@email.com"
-            }
-          ]
-        },
-        "children": [
-          {
-            "id": "s1608918285175",
-            "type": "do-action",
-            "data": {
-              "name": "Notification",
-              "type": "notification",
-              "inputs": [
-                {
-                  "name": "Address",
-                  "value": "sample.email@email.com"
-                }
-              ]
-            },
-            "children": []
-          }
-        ]
       }
     ]
   }
