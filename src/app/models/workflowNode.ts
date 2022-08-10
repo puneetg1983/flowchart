@@ -10,10 +10,4 @@ export class workflowNode {
 
 export class workflowNodeData {
   name: string;
-  inputs: workflowInputs[];
-}
-
-export interface workflowInputs {
-  name: string;
-  value: any;
 }

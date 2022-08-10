@@ -4,7 +4,6 @@ import {
   NgFlowchartStepRegistry,
   NgFlowchart
 } from '@joelwenzel/ng-flowchart';
-import { HttpClient } from '@angular/common/http';
 import { workflow, workflowNode, workflowNodeData } from './models/workflowNode';
 
 @Component({
@@ -38,17 +37,13 @@ export class AppComponent {
 
   disabled = false;
 
-  constructor(private stepRegistry: NgFlowchartStepRegistry, private http: HttpClient) {
+  constructor(private stepRegistry: NgFlowchartStepRegistry) {
     this.callbacks.onDropError = this.onDropError;
     this.callbacks.onMoveError = this.onMoveError;
   }
 
   ngAfterViewInit() {
-    this.stepRegistry.registerStep('sample-step', this.normalStepTemplate);
-    this.stepRegistry.registerStep('do-action', this.normalStepTemplate);
     this.stepRegistry.registerStep('detector', this.normalStepTemplate);
-    this.stepRegistry.registerStep('notification', this.normalStepTemplate);
-    this.stepRegistry.registerStep('log', this.normalStepTemplate);
     this.stepRegistry.registerStep('condition', this.conditionStepTemplate);
     this.stepRegistry.registerStep('iftrue', this.ifTrueTemplate);
     this.stepRegistry.registerStep('iffalse', this.ifFalseTemplate);
