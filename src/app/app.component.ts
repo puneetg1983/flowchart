@@ -12,7 +12,7 @@ import { workflow, workflowNode, workflowNodeData } from './models/workflowNode'
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'workspace';
+  title = 'flowchart';
 
   callbacks: NgFlowchart.Callbacks = {};
   options: NgFlowchart.Options = {
