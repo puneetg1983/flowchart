@@ -9,5 +9,10 @@ export class workflowNode {
 }
 
 export class workflowNodeData {
-  name: string;
+  name: string = '';
+  detectorId: string = '';
+  isEditing: boolean = false;
+  queryText: string = '';
+  queryTextTemp: string = '';
+  isEditingQuery:boolean = false;
 }

@@ -3,37 +3,44 @@
   <div id="palette">
     <section>
       <button (click)="showFlowData()">Show JSON</button>
-      <button (click)="showUpload()">Upload JSON</button>
+      <!-- <button (click)="showUpload()">Upload JSON</button> -->
     </section>
-    <section>
-      <div class="sub-section">
-        <label for="step-gap-select" class="wide">Step Gap</label>
-        <select name="step-gap-select" id="step-gap-select" class="wide" (change)="onGapChanged($event)">
-          <option value="30">30</option>
-          <option value="40" selected>40</option>
-          <option value="60">60</option>
-        </select>
-      </div>
-      <div class="sub-section">
-        <label for="sequential">Sequential</label>
-        <input type="checkbox" name="sequential" (change)="onSequentialChange($event)" />
-      </div>
-      <div class="sub-section">
-        <label for="disabled">Disabled</label>
-        <input type="checkbox" name="disabled" />
-      </div>
-    </section>
-    <section>
-      <button (click)="clearData()">Clear Flow</button>
-    </section>
-
   </div>
 
   <ng-template #normalStep let-data>
     <div class="card" [attr.name]="data.data.name" #card>
-      <div><a href="javascript:void(0)" (click)="onDelete(data.id)">Delete</a></div>
-      <span>{{ data.data.name }}</span>
-      <div class="mt-2">
+      <div>
+        <strong style="float: left;">{{ data.data.name }}</strong>
+        <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete(data.id)">Delete</a></div>
+      </div>
+      <hr class="mb-3">
+      <div *ngIf="!data.data.isEditing">
+        <span>{{ data.data.detectorId }}</span>
+        <a class="ms-2" href="javascript:void(0)" (click)="editDetector(data.id)">Edit</a>
+        <div *ngIf="data.data.detectorId === 'kustoquery'">
+          <div *ngIf="!data.data.isEditingQuery">
+            <pre>{{ data.data.queryText }}</pre>
+            <div>
+              <a class="ms-2" href="javascript:void(0)" (click)="editQuery(data.id)">Edit Query</a>
+            </div>
+          </div>
+          <div *ngIf="data.data.isEditingQuery">
+            <textarea name="queryTextArea" rows="5" cols="100" [(ngModel)]="data.data.queryTextTemp"></textarea>
+            <div>
+              <input type="button" value="Save" (click)="saveQuery(data.id)">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="data.data.isEditing">
+        <select (change)="selectDetector($event,data.id)">
+          <option *ngFor="let detector of detectors" [selected]="data.data.detectorId === detector">
+            {{ detector }}
+          </option>
+        </select>
+        <input class="ms-2" type="button" value="Save" (click)="saveDetector(data.id)">
+      </div>
+      <div class="mt-5">
         <input type="button" value="Add Condition" (click)="addCondition(data.id)" [disabled]="isDisabled(data.id)">
         <input class="ms-2" type="button" value="Add Detector" (click)="addDetector(data.id)"
           [disabled]="isDisabled(data.id)">
@@ -44,8 +51,8 @@
   <ng-template #conditionStep let-data>
     <div class="condition choose" [attr.name]="data.data.name" #card>
       <div><a href="javascript:void(0)" (click)="onDelete(data.id)">Delete</a></div>
-      <input type="text" placeholder="Choose a value" />
-      <select class="ms-1">
+      <ng2-completer [(ngModel)]="searchStr" [datasource]="getAutoCompletions(data.id)" [minSearchLength]="0" placeholder="Choose a value"></ng2-completer>
+      <select style="float: left;" class="ms-1">
         <option>eq</option>
         <option>ne</option>
         <option>gt</option>
@@ -53,7 +60,7 @@
         <option>gte</option>
         <option>lte</option>
       </select>
-      <input class="ms-2" type="text" placeholder="Choose a value" />
+      <ng2-completer [(ngModel)]="searchStr" [datasource]="getAutoCompletions(data.id)" [minSearchLength]="0" placeholder="Choose a value"></ng2-completer>      
     </div>
   </ng-template>
 

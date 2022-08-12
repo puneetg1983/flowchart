@@ -2,7 +2,8 @@ import { Component, ViewChild, TemplateRef } from '@angular/core';
 import {
   NgFlowchartCanvasDirective,
   NgFlowchartStepRegistry,
-  NgFlowchart
+  NgFlowchart,
+  NgFlowchartStepComponent
 } from '@joelwenzel/ng-flowchart';
 import { workflow, workflowNode, workflowNodeData } from './models/workflowNode';
 
@@ -13,7 +14,7 @@ import { workflow, workflowNode, workflowNodeData } from './models/workflowNode'
 })
 export class AppComponent {
   title = 'flowchart';
-
+  searchStr = "";
   callbacks: NgFlowchart.Callbacks = {};
   options: NgFlowchart.Options = {
     stepGap: 40,
@@ -36,6 +37,11 @@ export class AppComponent {
   canvas: NgFlowchartCanvasDirective;
 
   disabled = false;
+
+  detectors: string[] = ['frontendcheck', 'datarolecheck', 'workercheck', 'kustoquery']
+  selectedDetectors = new Map<string, string>();
+  defaultQueryText: string = "<YOUR_TABLE_NAME>\n| where {Utilities.TimeAndTenantFilterQuery(cxt.StartTime, cxt.EndTime, cxt.Resource)}\n| <YOUR_QUERY>";
+  captains = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
 
   constructor(private stepRegistry: NgFlowchartStepRegistry) {
     this.callbacks.onDropError = this.onDropError;
@@ -63,8 +69,11 @@ export class AppComponent {
     let wfNode = new workflowNode();
     wfNode.type = "detector";
     wfNode.data = new workflowNodeData();
-    wfNode.data.name = "Detector1";
+    wfNode.data.name = this.detectors[0] + "1";
+    wfNode.data.detectorId = this.detectors[0];
     wfNode.children = [];
+
+
 
     wf.root = wfNode;
     this.canvas.getFlow().upload(wf);
@@ -110,6 +119,22 @@ export class AppComponent {
       .getFlow()
       .getStep(id)
       .destroy(true);
+  }
+
+  getAutoCompletions(id: string): string[] {
+    let completions = [];
+    let currentNode = this.canvas.getFlow().getStep(id);
+    if (currentNode == null) {
+      return completions;
+    }
+    while (currentNode.parent != null) {
+      if (currentNode.parent.data.name) {
+        completions.push(currentNode.parent.data.name + ".rows[0]['Column1']");
+      }
+      currentNode = currentNode.parent;
+    }
+
+    return completions;
   }
 
   addCondition(id) {
@@ -162,7 +187,7 @@ export class AppComponent {
   }
 
   addDetector(id: string) {
-    let dataNode = this.getNewDetectorNode("Detector1");
+    let dataNode = this.getNewDetectorNode(this.detectors[0]);
     let currentNode = this.canvas.getFlow().getStep(id);
     currentNode.addChild({
       template: this.normalStepTemplate,
@@ -173,14 +198,48 @@ export class AppComponent {
     });
   }
 
-  getNewWorkFlowDataNode(name: string): workflowNodeData {
+  getNewDetectorNode(detectorId: string): workflowNodeData {
+    let idNumber = this.getIdNumberForDetector(detectorId);
     let wfNodeData = new workflowNodeData();
-    wfNodeData.name = name;
+    wfNodeData.name = detectorId + idNumber;
+    wfNodeData.detectorId = detectorId;
     return wfNodeData;
   }
 
-  getNewDetectorNode(detectorId: string): workflowNodeData {
-    return this.getNewWorkFlowDataNode(detectorId);
+  getIdNumberForDetector(detectorId: string): number {
+    return this.getMaxIdForNode(detectorId, null, 0) + 1;
+
+  }
+
+  getMaxIdForNode(detectorId: string, node: NgFlowchartStepComponent, num: number): number {
+    if (node === null) {
+      node = this.canvas.getFlow().getRoot();
+    }
+    let nodeName: string = node.data.name;
+    if (nodeName.startsWith(detectorId)) {
+      let intPart = nodeName.substring(detectorId.length);
+      if (this.is_int(intPart)) {
+        let newNum = parseInt(intPart);
+        num = Math.max(num, newNum);
+      }
+    }
+
+    if (node.hasChildren) {
+      for (var node of node.children) {
+        num = Math.max(num, this.getMaxIdForNode(detectorId, node, num));
+      }
+      return num;
+    } else {
+      return num;
+    }
+  }
+
+  is_int(value) {
+    if ((parseInt(value) % 1 === 0)) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   isDisabled(id: string) {
@@ -189,6 +248,50 @@ export class AppComponent {
     }
 
     return this.canvas.getFlow().getStep(id).children.length > 0;
+  }
+
+  saveDetector(id: string) {
+    let currentNode = this.canvas.getFlow().getStep(id);
+    let wfNodeData = new workflowNodeData();
+    if (!this.selectedDetectors.has(id)) {
+      this.selectedDetectors.set(id, this.detectors[0]);
+    }
+
+    wfNodeData.detectorId = this.selectedDetectors.get(id);
+    let idNumber = this.getIdNumberForDetector(wfNodeData.detectorId);
+    wfNodeData.name = wfNodeData.detectorId + idNumber;
+
+    if (wfNodeData.detectorId === "kustoquery") {
+      wfNodeData.queryText = this.defaultQueryText;
+      wfNodeData.queryTextTemp = wfNodeData.queryText;
+    }
+
+    currentNode.data = wfNodeData;
+    currentNode.data.isEditing = false;
+  }
+
+  saveQuery(id: string) {
+    let currentNode = this.canvas.getFlow().getStep(id);
+    currentNode.data.queryText = currentNode.data.queryTextTemp;
+    currentNode.data.isEditingQuery = false;
+  }
+
+  selectDetector(event: any, id: string) {
+    this.selectedDetectors.set(id, event.target.value);
+  }
+
+  editDetector(id: string) {
+    let currentNode = this.canvas.getFlow().getStep(id);
+    currentNode.data.isEditing = true;
+  }
+
+  editQuery(id: string) {
+    let currentNode = this.canvas.getFlow().getStep(id);
+    currentNode.data.isEditingQuery = true;
+  }
+
+  getSelectedValue(id: string): string {
+    return this.selectedDetectors.get(id);
   }
 
 }
