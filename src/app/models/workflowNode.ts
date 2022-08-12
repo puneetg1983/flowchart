@@ -14,5 +14,6 @@ export class workflowNodeData {
   isEditing: boolean = false;
   queryText: string = '';
   queryTextTemp: string = '';
-  isEditingQuery:boolean = false;
+  isEditingQuery: boolean = false;
+  completionOptions: string[] = [];
 }

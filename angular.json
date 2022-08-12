@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "flowchart"
+    }
+  },
+  "defaultProject": "flowchart",
+  "cli": {
+    "analytics": false
+  }
 }

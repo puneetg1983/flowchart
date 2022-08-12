@@ -128,7 +128,7 @@ export class AppComponent {
       return completions;
     }
     while (currentNode.parent != null) {
-      if (currentNode.parent.data.name) {
+      if (currentNode.parent.data.name && currentNode.parent.type == 'detector') {
         completions.push(currentNode.parent.data.name + ".rows[0]['Column1']");
       }
       currentNode = currentNode.parent;
@@ -141,7 +141,7 @@ export class AppComponent {
     let wfNode = new workflowNode();
     let wfIfTrueNode = new workflowNode();
     let wfIfFalseNode = new workflowNode();
-
+    let completionOptions: string[] = [];
     wfIfTrueNode.type = "iftrue";
     wfIfFalseNode.type = "iffalse";
 
@@ -150,6 +150,9 @@ export class AppComponent {
     wfNode.children.push(wfIfFalseNode);
 
     let dataNode = new workflowNodeData();
+
+
+
     let ifDataNode = new workflowNodeData();
     ifDataNode.name = "iftrue";
 
@@ -158,6 +161,17 @@ export class AppComponent {
 
     dataNode.name = "some-condition";
     let currentNode = this.canvas.getFlow().getStep(id);
+    let currentNodeTemp = this.canvas.getFlow().getStep(id);
+    completionOptions.push(currentNodeTemp.data.name + ".rows[0]['Column1']");
+
+    while (currentNodeTemp.parent != null) {
+      if (currentNodeTemp.parent.data.name && currentNodeTemp.parent.type == 'detector') {
+        completionOptions.push(currentNodeTemp.parent.data.name + ".rows[0]['Column1']");
+      }
+      currentNodeTemp = currentNodeTemp.parent;
+    }
+    dataNode.completionOptions = completionOptions;
+
     let condtionNode = currentNode.addChild({
       template: this.conditionStepTemplate,
       type: 'condition',
@@ -187,8 +201,10 @@ export class AppComponent {
   }
 
   addDetector(id: string) {
+    let completionOptions = [];
     let dataNode = this.getNewDetectorNode(this.detectors[0]);
     let currentNode = this.canvas.getFlow().getStep(id);
+
     currentNode.addChild({
       template: this.normalStepTemplate,
       type: 'detector',

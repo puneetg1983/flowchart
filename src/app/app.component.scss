@@ -66,13 +66,15 @@ select {
 .condition {
     background: white;
     box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
-    min-width: 40em;
-    height: 5em;
+    min-height: 6em;
+    min-width: 20em;
 }
 
 .choose {
     padding: 1em;
     height: 10em;
+    min-width: 40em;
+  
 }
 
 .iftrue {
@@ -109,9 +111,9 @@ select {
     display: inline-block;
 }
 
-.completer-input  {
-    width: 270px !important;
-    height: 40px !important;
+.completer-style  {
+    width: 270px;
+    height: 40px;
 }
 
 div#canvas[disabled="true"] {
@@ -121,3 +123,8 @@ div#canvas[disabled="true"] {
 div#canvas[disabled="true"] ::ng-deep.ngflowchart-step-wrapper {
     opacity: .7;
 }
+
+::ng-deep .completer-input{
+    width: 270px;
+    height: 40px;
+} 
