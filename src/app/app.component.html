@@ -41,7 +41,10 @@
         <input class="ms-2" type="button" value="Save" (click)="saveDetector(data.id)">
       </div>
       <div class="mt-5">
-        <input type="button" value="Add Condition" (click)="addCondition(data.id)" [disabled]="isDisabled(data.id)">
+        <input type="button" value="Add Condition" (click)="addCondition(data.id)"
+          [disabled]="isDisabled(data.id)">
+        <input class="ms-2" type="button" value="Add Switch Condition" (click)="addSwitchCondition(data.id)"
+          [disabled]="isDisabled(data.id)">
         <input class="ms-2" type="button" value="Add Detector" (click)="addDetector(data.id)"
           [disabled]="isDisabled(data.id)">
       </div>
@@ -59,8 +62,8 @@
       </div>
       <div class="row mt-2">
         <div class="col">
-          <ng2-completer [datasource]="data.data.completionOptions" [minSearchLength]="0"
-            placeholder="Choose a value" [inputClass]="'completer-style'"></ng2-completer>
+          <ng2-completer [datasource]="data.data.completionOptions" [minSearchLength]="0" placeholder="Choose a value"
+            [inputClass]="'completer-style'"></ng2-completer>
         </div>
         <div class="col"> <select style="float: left;" class="ms-1">
             <option>eq</option>
@@ -71,8 +74,8 @@
             <option>lte</option>
           </select> </div>
         <div class="col">
-          <ng2-completer [datasource]="data.data.completionOptions" [minSearchLength]="0"
-            placeholder="Choose a value"></ng2-completer>
+          <ng2-completer [(ngModel)]="data.data.conditionValue" [datasource]="data.data.completionOptions" [minSearchLength]="0" placeholder="Choose a value">
+          </ng2-completer>
         </div>
       </div>
 
@@ -112,6 +115,48 @@
       </div>
       <input class="mt-3 ms-2" type="button" value="Add Detector" (click)="addDetector(data.id)"
         [disabled]="isDisabled(data.id)">
+    </div>
+  </ng-template>
+
+  <ng-template #switchStep let-data>
+    <div class="card" [attr.name]="data.data.name" #card>
+      <div>
+        <strong style="float: left;">Switch</strong>
+        <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete(data.id)">Delete</a></div>
+      </div>
+      <span>On</span>
+      <ng2-completer [(ngModel)]="data.data.conditionValue" [datasource]="data.data.completionOptions" [minSearchLength]="0" placeholder="Choose a value">
+      </ng2-completer>
+    </div>
+  </ng-template>
+
+  <ng-template #switchCaseStep let-data>
+    <div class="card" [attr.name]="data.data.name" #card>
+      <div>
+        <strong style="float: left;">Case</strong>
+        <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete(data.id)">Delete</a></div>
+      </div>
+      <span>Equals</span>
+      <ng2-completer [(ngModel)]="data.data.conditionValue" [datasource]="data.data.completionOptions" [minSearchLength]="0" placeholder="Choose a value">
+      </ng2-completer>
+
+      <div class="mt-3 ms-2">
+        <input type="button" value="Add Detector" (click)="addDetector(data.id)" [disabled]="isDisabled(data.id)">
+        <input class="ms-2" type="button" value="Add Case" (click)="addSwitchCase(data.id)">
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #switchCaseDefaultStep let-data>
+    <div class="card" [attr.name]="data.data.name" #card>
+      <div>
+        <strong style="float: left;">Default</strong>
+        <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete(data.id)">Delete</a></div>
+      </div>
+      <div>If no case contains a matching value</div>
+      <div class="mt-3 ms-2">
+        <input type="button" value="Add Detector" (click)="addDetector(data.id)" [disabled]="isDisabled(data.id)">
+      </div>
     </div>
   </ng-template>
 </main>
