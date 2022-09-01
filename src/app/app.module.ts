@@ -6,10 +6,25 @@ import { NgFlowchartModule } from '@joelwenzel/ng-flowchart';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Ng2CompleterModule } from "ng2-completer";
+import { SingleNodeStepComponent } from './single-node-step/single-node-step.component';
+import { ConditionStepComponent } from './condition-step/condition-step.component';
+import { ConditionIftrueStepComponent } from './condition-iftrue-step/condition-iftrue-step.component';
+import { ConditionIffalseStepComponent } from './condition-iffalse-step/condition-iffalse-step.component';
+import { SwitchStepComponent } from './switch-step/switch-step.component';
+import { SwitchCaseStepComponent } from './switch-case-step/switch-case-step.component';
+import { SwitchCaseDefaultStepComponent } from './switch-case-default-step/switch-case-default-step.component';
+import { FlowHelperService } from 'src/services/FlowHelperService';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SingleNodeStepComponent,
+    ConditionStepComponent,
+    ConditionIftrueStepComponent,
+    ConditionIffalseStepComponent,
+    SwitchStepComponent,
+    SwitchCaseStepComponent,
+    SwitchCaseDefaultStepComponent
   ],
   imports: [
     BrowserModule,
@@ -19,7 +34,9 @@ import { Ng2CompleterModule } from "ng2-completer";
     FormsModule,
     Ng2CompleterModule
   ],
-  providers: [],
+  providers: [
+    FlowHelperService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

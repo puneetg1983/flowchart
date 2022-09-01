@@ -59,7 +59,7 @@ select {
     background: white;
     box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
     border-radius: 4px;
-    min-width: 12em;
+    min-width: 300px;
     min-height: 10em;
 }
 
@@ -68,21 +68,6 @@ select {
     box-shadow: 0px 4px 2em rgba(22, 33, 74, 0.05);
     min-height: 6em;
     min-width: 20em;
-}
-
-.choose {
-    padding: 1em;
-    height: 10em;
-    min-width: 40em;
-  
-}
-
-.iftrue {
-    border: 1px solid green;
-}
-
-.iffalse {
-    border: 1px solid red;
 }
 
 .msla-card-title-group {

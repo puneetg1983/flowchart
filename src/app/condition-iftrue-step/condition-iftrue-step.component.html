@@ -1,0 +1,15 @@
+<div class="condition iftrue" [attr.name]="data.name" #card #canvasContent>
+    <div class="msla-card-title-group" role="button" aria-expanded="true" aria-label="If true" tabindex="0">
+      <div class="msla-image-header">
+        <img style="vertical-align:top" alt="" role="presentation"
+          src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiA8cGF0aCBkPSJtMCAwaDMydjMyaC0zMnoiIGZpbGw9IiM4OGRhOGQiLz4NCiA8Zz4NCiAgPHBhdGggZD0ibTI0LjAyNSAxMC4yOTMgMC44ODU2MSAwLjg4NTYxLTEwLjUxOSAxMC41MjktNS40ODA5LTUuNDkwOCAwLjg4NTYxLTAuODg1NjEgNC41OTUzIDQuNTg1NSA5LjYzMzUtOS42MjM2eiIgZmlsbD0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjY3OTQiLz4NCiA8L2c+DQo8L3N2Zz4NCg=="
+          class="msla-card-header-icon" draggable="false">
+      </div>
+      <a aria-expanded="true" class="msla-card-header-title-view" tabindex="-1" href="javascript:void(0)"
+        draggable="false" role="button">
+        <div class="msla-card-title">If true</div>
+      </a>
+    </div>
+    <input class="mt-3 ms-2" type="button" value="Add Detector" (click)="addDetector()"
+      [disabled]="isDisabled()">
+  </div>

@@ -2,10 +2,10 @@ import { Component, ViewChild, TemplateRef } from '@angular/core';
 import {
   NgFlowchartCanvasDirective,
   NgFlowchartStepRegistry,
-  NgFlowchart,
-  NgFlowchartStepComponent
+  NgFlowchart
 } from '@joelwenzel/ng-flowchart';
 import { workflow, workflowNode, workflowNodeData } from './models/workflowNode';
+import { SingleNodeStepComponent } from './single-node-step/single-node-step.component';
 
 @Component({
   selector: 'app-root',
@@ -24,37 +24,12 @@ export class AppComponent {
     }
   };
 
-  @ViewChild('normalStep')
-  normalStepTemplate: TemplateRef<any>;
-
-  @ViewChild('conditionStep')
-  conditionStepTemplate: TemplateRef<any>;
-
-  @ViewChild('ifTrueStep')
-  ifTrueTemplate: TemplateRef<any>;
-
-  @ViewChild('ifFalseStep')
-  ifFalseTemplate: TemplateRef<any>;
-
-  @ViewChild('switchStep')
-  switchStepTemplate: TemplateRef<any>;
-
-  @ViewChild('switchCaseStep')
-  switchCaseTemplate: TemplateRef<any>;
-
-  @ViewChild('switchCaseDefaultStep')
-  switchCaseDefaultTemplate: TemplateRef<any>;
-
 
   @ViewChild(NgFlowchartCanvasDirective)
   canvas: NgFlowchartCanvasDirective;
 
   disabled = false;
-
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck', 'kustoquery'];
-  selectedDetectors = new Map<string, string>();
-  defaultQueryText: string = "<YOUR_TABLE_NAME>\n| where {Utilities.TimeAndTenantFilterQuery(cxt.StartTime, cxt.EndTime, cxt.Resource)}\n| <YOUR_QUERY>";
-  captains = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett'];
 
   constructor(private stepRegistry: NgFlowchartStepRegistry) {
     this.callbacks.onDropError = this.onDropError;
@@ -62,10 +37,10 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
-    this.stepRegistry.registerStep('detector', this.normalStepTemplate);
-    this.stepRegistry.registerStep('condition', this.conditionStepTemplate);
-    this.stepRegistry.registerStep('iftrue', this.ifTrueTemplate);
-    this.stepRegistry.registerStep('iffalse', this.ifFalseTemplate);
+     this.stepRegistry.registerStep('detector', SingleNodeStepComponent);
+    // this.stepRegistry.registerStep('condition', ConditionStepComponent);
+    // this.stepRegistry.registerStep('iftrue', ConditionIftrueStepComponent);
+    // this.stepRegistry.registerStep('iffalse', ConditionIffalseStepComponent);
     this.showUpload();
   }
 
@@ -85,8 +60,6 @@ export class AppComponent {
     wfNode.data.name = this.detectors[0] + "1";
     wfNode.data.detectorId = this.detectors[0];
     wfNode.children = [];
-
-
 
     wf.root = wfNode;
     this.canvas.getFlow().upload(wf);
@@ -132,301 +105,6 @@ export class AppComponent {
       .getFlow()
       .getStep(id)
       .destroy(true);
-  }
-
-  getAutoCompletions(id: string): string[] {
-    let completions = [];
-    let currentNode = this.canvas.getFlow().getStep(id);
-    if (currentNode == null) {
-      return completions;
-    }
-    while (currentNode.parent != null) {
-      if (currentNode.parent.data.name && currentNode.parent.type == 'detector') {
-        completions.push(currentNode.parent.data.name + ".rows[0]['Column1']");
-      }
-      currentNode = currentNode.parent;
-    }
-
-    return completions;
-  }
-
-  addCondition(id) {
-    let wfNode = new workflowNode();
-    let wfIfTrueNode = new workflowNode();
-    let wfIfFalseNode = new workflowNode();
-    let completionOptions: string[] = [];
-    wfIfTrueNode.type = "iftrue";
-    wfIfFalseNode.type = "iffalse";
-
-    wfNode.children = [];
-    wfNode.children.push(wfIfTrueNode);
-    wfNode.children.push(wfIfFalseNode);
-
-    let dataNode = new workflowNodeData();
-
-
-
-    let ifDataNode = new workflowNodeData();
-    ifDataNode.name = "iftrue";
-
-    let elseDataNode = new workflowNodeData();
-    elseDataNode.name = "iffalse";
-
-    dataNode.name = "some-condition";
-    let currentNode = this.canvas.getFlow().getStep(id);
-    let currentNodeTemp = this.canvas.getFlow().getStep(id);
-    completionOptions.push(currentNodeTemp.data.name + ".rows[0]['Column1']");
-
-    while (currentNodeTemp.parent != null) {
-      if (currentNodeTemp.parent.data.name && currentNodeTemp.parent.type == 'detector') {
-        completionOptions.push(currentNodeTemp.parent.data.name + ".rows[0]['Column1']");
-      }
-      currentNodeTemp = currentNodeTemp.parent;
-    }
-    dataNode.completionOptions = completionOptions;
-
-    let condtionNode = currentNode.addChild({
-      template: this.conditionStepTemplate,
-      type: 'condition',
-      data: dataNode
-    }, {
-      sibling: true
-    });
-
-    condtionNode.then((addedNode) => {
-      addedNode.addChild({
-        template: this.ifTrueTemplate,
-        type: 'iftrue',
-        data: ifDataNode
-      }, {
-        sibling: true
-      });
-
-      addedNode.addChild({
-        template: this.ifFalseTemplate,
-        type: 'iffalse',
-        data: elseDataNode
-      }, {
-        sibling: true
-      });
-    });
-
-  }
-
-  addSwitchCondition(id) {
-    let wfNode = new workflowNode();
-    let swithCaseNode = new workflowNode();
-    let switchCaseDefaultNode = new workflowNode();
-    let completionOptions: string[] = [];
-    swithCaseNode.type = "switchCaseMain";
-    switchCaseDefaultNode.type = "switchCaseDefault";
-
-    wfNode.children = [];
-    wfNode.children.push(swithCaseNode, switchCaseDefaultNode);
-
-    let dataNode = new workflowNodeData();
-
-    let switchCaseDataNode = new workflowNodeData();
-    switchCaseDataNode.name = "switchCase";
-
-    let switchCaseDefaultDataNode = new workflowNodeData();
-    switchCaseDefaultDataNode.name = "switchCaseDefault";
-
-    dataNode.name = "switch-condition";
-    let currentNode = this.canvas.getFlow().getStep(id);
-    let currentNodeTemp = this.canvas.getFlow().getStep(id);
-    completionOptions.push(currentNodeTemp.data.name + ".rows[0]['Column1']");
-
-    while (currentNodeTemp.parent != null) {
-      if (currentNodeTemp.parent.data.name && currentNodeTemp.parent.type == 'detector') {
-        completionOptions.push(currentNodeTemp.parent.data.name + ".rows[0]['Column1']");
-      }
-      currentNodeTemp = currentNodeTemp.parent;
-    }
-    dataNode.completionOptions = completionOptions;
-    switchCaseDataNode.completionOptions = completionOptions;
-
-    let condtionNode = currentNode.addChild({
-      template: this.switchStepTemplate,
-      type: 'switchCondition',
-      data: dataNode
-    }, {
-      sibling: true
-    });
-
-    condtionNode.then((addedNode) => {
-      addedNode.addChild({
-        template: this.switchCaseTemplate,
-        type: 'switchCase',
-        data: switchCaseDataNode
-      }, {
-        sibling: true
-      });
-
-      addedNode.addChild({
-        template: this.switchCaseDefaultTemplate,
-        type: 'switchCaseDefault',
-        data: switchCaseDefaultDataNode
-      }, {
-        sibling: true
-      });
-    });
-
-  }
-
-  addSwitchCase(id: string) {
-    let swithCaseNode = new workflowNode();
-    swithCaseNode.type = "switchCase";
-    let completionOptions: string[] = [];
-    let switchCondtionNode = this.canvas.getFlow().getStep(id).parent;
-
-    let switchCaseDataNode = new workflowNodeData();
-    switchCaseDataNode.name = "switchCase";
-
-    let defaultCaseNode = switchCondtionNode.children[switchCondtionNode.children.length - 1];
-    let defaultCaseNodeChildren = defaultCaseNode.children;
-
-    //
-    // TODO :: This will currently delete all the child elements 
-    // (if any) on the default case node. Handle this situation 
-    // later
-    //
-
-    this.canvas
-      .getFlow()
-      .getStep(defaultCaseNode.id)
-      .destroy(true);
-
-    console.log("defaultCaseNodeChildren = " + defaultCaseNodeChildren);
-
-    switchCondtionNode.addChild({
-      template: this.switchCaseTemplate,
-      type: 'switchCase',
-      data: switchCaseDataNode
-    }, {
-      sibling: true
-    }).then((unused) => {
-
-      switchCondtionNode.addChild({
-        template: this.switchCaseDefaultTemplate,
-        type: 'switchCaseDefault',
-        data: defaultCaseNode.data
-      }, {
-        sibling: true
-      });
-    });
-  }
-
-  addDetector(id: string) {
-    let dataNode = this.getNewDetectorNode(this.detectors[0]);
-    let currentNode = this.canvas.getFlow().getStep(id);
-
-    currentNode.addChild({
-      template: this.normalStepTemplate,
-      type: 'detector',
-      data: dataNode
-    }, {
-      sibling: true
-    });
-  }
-
-  getNewDetectorNode(detectorId: string): workflowNodeData {
-    let idNumber = this.getIdNumberForDetector(detectorId);
-    let wfNodeData = new workflowNodeData();
-    wfNodeData.name = detectorId + idNumber;
-    wfNodeData.detectorId = detectorId;
-    return wfNodeData;
-  }
-
-  getIdNumberForDetector(detectorId: string): number {
-    return this.getMaxIdForNode(detectorId, null, 0) + 1;
-
-  }
-
-  getMaxIdForNode(detectorId: string, node: NgFlowchartStepComponent, num: number): number {
-    if (node === null) {
-      node = this.canvas.getFlow().getRoot();
-    }
-
-    if (node.type === 'detector') {
-      let nodeName: string = node.data.name;
-      if (nodeName.startsWith(detectorId)) {
-        let intPart = nodeName.substring(detectorId.length);
-        if (this.is_int(intPart)) {
-          let newNum = parseInt(intPart);
-          num = Math.max(num, newNum);
-        }
-      }
-    }
-
-    if (node.hasChildren) {
-      for (var node of node.children) {
-        num = Math.max(num, this.getMaxIdForNode(detectorId, node, num));
-      }
-      return num;
-    } else {
-      return num;
-    }
-  }
-
-  is_int(value) {
-    if ((parseInt(value) % 1 === 0)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  isDisabled(id: string) {
-    if (id === null || this.canvas.getFlow().getStep(id) == null || this.canvas.getFlow().getStep(id).children === null) {
-      return false;
-    }
-
-    return this.canvas.getFlow().getStep(id).children.length > 0;
-  }
-
-  saveDetector(id: string) {
-    let currentNode = this.canvas.getFlow().getStep(id);
-    let wfNodeData = new workflowNodeData();
-    if (!this.selectedDetectors.has(id)) {
-      this.selectedDetectors.set(id, this.detectors[0]);
-    }
-
-    wfNodeData.detectorId = this.selectedDetectors.get(id);
-    let idNumber = this.getIdNumberForDetector(wfNodeData.detectorId);
-    wfNodeData.name = wfNodeData.detectorId + idNumber;
-
-    if (wfNodeData.detectorId === "kustoquery") {
-      wfNodeData.queryText = this.defaultQueryText;
-      wfNodeData.queryTextTemp = wfNodeData.queryText;
-    }
-
-    currentNode.data = wfNodeData;
-    currentNode.data.isEditing = false;
-  }
-
-  saveQuery(id: string) {
-    let currentNode = this.canvas.getFlow().getStep(id);
-    currentNode.data.queryText = currentNode.data.queryTextTemp;
-    currentNode.data.isEditingQuery = false;
-  }
-
-  selectDetector(event: any, id: string) {
-    this.selectedDetectors.set(id, event.target.value);
-  }
-
-  editDetector(id: string) {
-    let currentNode = this.canvas.getFlow().getStep(id);
-    currentNode.data.isEditing = true;
-  }
-
-  editQuery(id: string) {
-    let currentNode = this.canvas.getFlow().getStep(id);
-    currentNode.data.isEditingQuery = true;
-  }
-
-  getSelectedValue(id: string): string {
-    return this.selectedDetectors.get(id);
   }
 
 }

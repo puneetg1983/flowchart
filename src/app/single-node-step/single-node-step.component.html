@@ -1,0 +1,41 @@
+<div class="card" [attr.name]="data.name" #canvasContent ngFlowchartCanvas>
+    <div>
+      <strong style="float: left;">{{ data.name }}</strong>
+      <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete()">Delete</a></div>
+    </div>
+    <hr class="mb-3">
+    <div *ngIf="!data.isEditing">
+      <span>{{ data.detectorId }}</span>
+      <a class="ms-2" href="javascript:void(0)" (click)="editDetector()">Edit</a>
+      <div *ngIf="data.detectorId === 'kustoquery'">
+        <div *ngIf="!data.isEditingQuery">
+          <pre>{{ data.queryText }}</pre>
+          <div>
+            <a class="ms-2" href="javascript:void(0)" (click)="editQuery()">Edit Query</a>
+          </div>
+        </div>
+        <div *ngIf="data.isEditingQuery">
+          <textarea name="queryTextArea" rows="5" cols="100" [(ngModel)]="data.queryTextTemp"></textarea>
+          <div>
+            <input type="button" value="Save" (click)="saveQuery()">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="data.isEditing">
+      <select (change)="selectDetector($event)">
+        <option *ngFor="let detector of detectors" [selected]="data.detectorId === detector">
+          {{ detector }}
+        </option>
+      </select>
+      <input class="ms-2" type="button" value="Save" (click)="saveDetector()">
+    </div>
+    <div class="mt-5">
+      <input type="button" value="Add Condition" (click)="addCondition()"
+        [disabled]="isDisabled()">
+      <input class="ms-2" type="button" value="Add Switch Condition" (click)="addSwitchCondition()"
+        [disabled]="isDisabled()">
+      <input class="ms-2" type="button" value="Add Detector" (click)="addDetector()"
+        [disabled]="isDisabled()">
+    </div>
+  </div>
