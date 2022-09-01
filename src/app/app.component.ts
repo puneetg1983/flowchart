@@ -29,7 +29,7 @@ export class AppComponent {
   canvas: NgFlowchartCanvasDirective;
 
   disabled = false;
-  detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck', 'kustoquery'];
+  detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
 
   constructor(private stepRegistry: NgFlowchartStepRegistry) {
     this.callbacks.onDropError = this.onDropError;
