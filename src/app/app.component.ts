@@ -37,7 +37,7 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
-     this.stepRegistry.registerStep('detector', SingleNodeStepComponent);
+    this.stepRegistry.registerStep('detector', SingleNodeStepComponent);
     // this.stepRegistry.registerStep('condition', ConditionStepComponent);
     // this.stepRegistry.registerStep('iftrue', ConditionIftrueStepComponent);
     // this.stepRegistry.registerStep('iffalse', ConditionIffalseStepComponent);
@@ -59,6 +59,7 @@ export class AppComponent {
     wfNode.data = new workflowNodeData();
     wfNode.data.name = this.detectors[0] + "1";
     wfNode.data.detectorId = this.detectors[0];
+    wfNode.data.title = this.detectors[0] + "-Title";
     wfNode.children = [];
 
     wf.root = wfNode;

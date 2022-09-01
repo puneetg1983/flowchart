@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
 import { FlowHelperService } from 'src/services/FlowHelperService';
-import { workflowNode, workflowNodeData } from '../models/workflowNode';
+import { nodeType, workflowNode, workflowNodeData } from '../models/workflowNode';
 import { SwitchCaseDefaultStepComponent } from '../switch-case-default-step/switch-case-default-step.component';
 import { SwitchCaseStepComponent } from '../switch-case-step/switch-case-step.component';
 
@@ -12,7 +12,7 @@ import { SwitchCaseStepComponent } from '../switch-case-step/switch-case-step.co
 })
 export class SingleNodeStepComponent extends NgFlowchartStepComponent implements OnInit {
 
-  @Input() data: any;
+  @Input() data: workflowNodeData;
   _flowHelperService: FlowHelperService;
 
   constructor(flowHelperService: FlowHelperService) {
@@ -20,7 +20,8 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
     this._flowHelperService = flowHelperService;
   }
 
-  detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck', 'kustoquery'];
+  nodeTypes: string[] = Object.keys(nodeType);
+  detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
   selectedDetectors = new Map<string, string>();
   defaultQueryText: string = "<YOUR_TABLE_NAME>\n| where {Utilities.TimeAndTenantFilterQuery(cxt.StartTime, cxt.EndTime, cxt.Resource)}\n| <YOUR_QUERY>";
 
@@ -36,21 +37,13 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   }
 
   saveDetector() {
-    let wfNodeData = new workflowNodeData();
     if (!this.selectedDetectors.has(this.id)) {
       this.selectedDetectors.set(this.id, this.detectors[0]);
     }
 
-    wfNodeData.detectorId = this.selectedDetectors.get(this.id);
-    let idNumber = this._flowHelperService.getIdNumberForDetector(this, wfNodeData.detectorId);
-    wfNodeData.name = wfNodeData.detectorId + idNumber;
-
-    if (wfNodeData.detectorId === "kustoquery") {
-      wfNodeData.queryText = this.defaultQueryText;
-      wfNodeData.queryTextTemp = wfNodeData.queryText;
-    }
-
-    this.data = wfNodeData;
+    this.data.detectorId = this.selectedDetectors.get(this.id);
+    let idNumber = this._flowHelperService.getIdNumberForDetector(this, this.data.detectorId);
+    this.data.name = this.data.detectorId + idNumber;
     this.data.isEditing = false;
   }
 
@@ -61,6 +54,21 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
 
   selectDetector(event: any) {
     this.selectedDetectors.set(this.id, event.target.value);
+  }
+
+  changeNodeType(event: any) {
+    this.data.nodeType = event.target.value;
+    if (this.data.nodeType === nodeType.kustoQuery) {
+      let idNumber = this._flowHelperService.getIdNumberForDetector(this, "kustoQuery");
+      this.data.name = "kustoQuery" + idNumber;
+      this.data.queryText = this.defaultQueryText;
+      this.data.queryTextTemp = this.defaultQueryText;
+    } else {
+      this.data.queryText = "";
+      let idNumber = this._flowHelperService.getIdNumberForDetector(this, this.data.detectorId);
+      this.data.name = this.data.detectorId + idNumber;
+    }
+
   }
 
   editDetector() {
@@ -83,7 +91,7 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
     this._flowHelperService.addSwitchCondition(this);
   }
 
-  addCondition(){
+  addCondition() {
     this._flowHelperService.addCondition(this);
   }
 

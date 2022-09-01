@@ -1,26 +1,36 @@
 <div class="card" [attr.name]="data.name" #canvasContent ngFlowchartCanvas>
-    <div>
-      <strong style="float: left;">{{ data.name }}</strong>
-      <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete()">Delete</a></div>
-    </div>
-    <hr class="mb-3">
+  <div>
+    <ng-container *ngIf="!data.isEditingTitle">
+      <strong style="float: left;">{{ data.title }}</strong>
+      <a class="ms-2" href="javascript:void(0)" (click)="data.isEditingTitle = !data.isEditingTitle">Edit title</a>
+    </ng-container>
+    <ng-container *ngIf="data.isEditingTitle">
+      <input [(ngModel)]="data.title" type="text">
+      <a class="ms-2" href="javascript:void(0)" (click)="data.isEditingTitle = !data.isEditingTitle">Save</a>
+    </ng-container>
+    <div style="float: right;"><a href="javascript:void(0)" (click)="onDelete()">Delete</a></div>
+  </div>
+  <hr class="mb-3">
+  <table>
+    <tr>
+      <td>Id</td>
+      <td>{{ data.name }}</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>
+        <select (change)="changeNodeType($event)">
+          <option *ngFor="let nodeType of nodeTypes" [selected]="data.nodeType === nodeType">
+            {{ nodeType }}
+          </option>
+        </select>
+      </td>
+    </tr>
+  </table>
+  <div *ngIf="data.nodeType === 'detector'">
     <div *ngIf="!data.isEditing">
       <span>{{ data.detectorId }}</span>
       <a class="ms-2" href="javascript:void(0)" (click)="editDetector()">Edit</a>
-      <div *ngIf="data.detectorId === 'kustoquery'">
-        <div *ngIf="!data.isEditingQuery">
-          <pre>{{ data.queryText }}</pre>
-          <div>
-            <a class="ms-2" href="javascript:void(0)" (click)="editQuery()">Edit Query</a>
-          </div>
-        </div>
-        <div *ngIf="data.isEditingQuery">
-          <textarea name="queryTextArea" rows="5" cols="100" [(ngModel)]="data.queryTextTemp"></textarea>
-          <div>
-            <input type="button" value="Save" (click)="saveQuery()">
-          </div>
-        </div>
-      </div>
     </div>
     <div *ngIf="data.isEditing">
       <select (change)="selectDetector($event)">
@@ -30,12 +40,25 @@
       </select>
       <input class="ms-2" type="button" value="Save" (click)="saveDetector()">
     </div>
-    <div class="mt-5">
-      <input type="button" value="Add Condition" (click)="addCondition()"
-        [disabled]="isDisabled()">
-      <input class="ms-2" type="button" value="Add Switch Condition" (click)="addSwitchCondition()"
-        [disabled]="isDisabled()">
-      <input class="ms-2" type="button" value="Add Detector" (click)="addDetector()"
-        [disabled]="isDisabled()">
+  </div>
+  <div *ngIf="data.nodeType === 'kustoQuery'">
+    <div *ngIf="data.isEditingQuery">
+      <textarea name="queryTextArea" rows="5" cols="100" [(ngModel)]="data.queryTextTemp"></textarea>
+      <div>
+        <input type="button" value="Save" (click)="saveQuery()">
+      </div>
+    </div>
+    <div *ngIf="!data.isEditingQuery">
+      <pre>{{ data.queryText }}</pre>
+      <div>
+        <a class="ms-2" href="javascript:void(0)" (click)="editQuery()">Edit Query</a>
+      </div>
     </div>
   </div>
+  <div class="mt-5">
+    <input type="button" value="Add Condition" (click)="addCondition()" [disabled]="isDisabled()">
+    <input class="ms-2" type="button" value="Add Switch Condition" (click)="addSwitchCondition()"
+      [disabled]="isDisabled()">
+    <input class="ms-2" type="button" value="Add Detector" (click)="addDetector()" [disabled]="isDisabled()">
+  </div>
+</div>
