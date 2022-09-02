@@ -1,9 +1,10 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
 import { FlowHelperService } from 'src/services/FlowHelperService';
-import { nodeType, workflowNode, workflowNodeData } from '../models/workflowNode';
-import { SwitchCaseDefaultStepComponent } from '../switch-case-default-step/switch-case-default-step.component';
-import { SwitchCaseStepComponent } from '../switch-case-step/switch-case-step.component';
+import { KustoQueryDialogComponent } from '../kusto-query-dialog/kusto-query-dialog.component';
+import { nodeType, workflowNodeData } from '../models/workflowNode';
+
 
 @Component({
   selector: 'single-node-step',
@@ -15,7 +16,7 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   @Input() data: workflowNodeData;
   _flowHelperService: FlowHelperService;
 
-  constructor(flowHelperService: FlowHelperService) {
+  constructor(flowHelperService: FlowHelperService, private matDialog: MatDialog) {
     super();
     this._flowHelperService = flowHelperService;
   }
@@ -46,12 +47,6 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
     this.data.name = this.data.detectorId + idNumber;
     this.data.isEditing = false;
   }
-
-  saveQuery() {
-    this.data.queryText = this.data.queryTextTemp;
-    this.data.isEditingQuery = false;
-  }
-
   selectDetector(event: any) {
     this.selectedDetectors.set(this.id, event.target.value);
   }
@@ -62,7 +57,6 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
       let idNumber = this._flowHelperService.getIdNumberForDetector(this, "kustoQuery");
       this.data.name = "kustoQuery" + idNumber;
       this.data.queryText = this.defaultQueryText;
-      this.data.queryTextTemp = this.defaultQueryText;
     } else {
       this.data.queryText = "";
       let idNumber = this._flowHelperService.getIdNumberForDetector(this, this.data.detectorId);
@@ -73,10 +67,6 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
 
   editDetector() {
     this.data.isEditing = true;
-  }
-
-  editQuery() {
-    this.data.isEditingQuery = true;
   }
 
   getSelectedValue(id: string): string {
@@ -93,6 +83,18 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
 
   addCondition() {
     this._flowHelperService.addCondition(this);
+  }
+
+  configureKustoQuery() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.height = '600px';
+    dialogConfig.width = '900px';
+    this.data.queryText !== '' ? dialogConfig.data = { queryText: this.data.queryText } : dialogConfig.data = { queryText: this.defaultQueryText }
+    this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(queryText => {
+      if (queryText !== '') {
+        this.data.queryText = queryText;
+      }
+    });
   }
 
 }

@@ -14,6 +14,12 @@ import { SwitchStepComponent } from './switch-step/switch-step.component';
 import { SwitchCaseStepComponent } from './switch-case-step/switch-case-step.component';
 import { SwitchCaseDefaultStepComponent } from './switch-case-default-step/switch-case-default-step.component';
 import { FlowHelperService } from 'src/services/FlowHelperService';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { KustoQueryDialogComponent } from './kusto-query-dialog/kusto-query-dialog.component';
+import { MonacoEditorModule } from 'ngx-monaco-editor';
 
 @NgModule({
   declarations: [
@@ -24,7 +30,8 @@ import { FlowHelperService } from 'src/services/FlowHelperService';
     ConditionIffalseStepComponent,
     SwitchStepComponent,
     SwitchCaseStepComponent,
-    SwitchCaseDefaultStepComponent
+    SwitchCaseDefaultStepComponent,
+    KustoQueryDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +39,12 @@ import { FlowHelperService } from 'src/services/FlowHelperService';
     HttpClientModule,
     NgFlowchartModule,
     FormsModule,
-    Ng2CompleterModule
+    Ng2CompleterModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatExpansionModule,
+    MonacoEditorModule.forRoot() // use forRoot() in main app module only.
   ],
   providers: [
     FlowHelperService

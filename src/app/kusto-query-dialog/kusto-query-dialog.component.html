@@ -1,0 +1,9 @@
+<h2 mat-dialog-title>Specify Kusto Query</h2>
+<mat-dialog-content>
+    <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <button class="ml-2" mat-raised-button color="warn" (click)="close()">Cancel</button>
+</mat-dialog-actions>
