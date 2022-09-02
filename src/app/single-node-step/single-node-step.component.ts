@@ -52,7 +52,7 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   }
 
   changeNodeType(event: any) {
-    this.data.nodeType = event.target.value;
+    this.data.nodeType = event.value;
     if (this.data.nodeType === nodeType.kustoQuery) {
       let idNumber = this._flowHelperService.getIdNumberForDetector(this, "kustoQuery");
       this.data.name = "kustoQuery" + idNumber;

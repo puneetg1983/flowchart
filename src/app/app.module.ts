@@ -24,6 +24,7 @@ import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import {MatMenuModule} from '@angular/material/menu';
     MatDividerModule,
     MatSelectModule,
     MatMenuModule,
+    MatButtonToggleModule,
     MonacoEditorModule.forRoot() // use forRoot() in main app module only.
   ],
   providers: [

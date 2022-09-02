@@ -3,19 +3,10 @@
     <mat-card-title>{{ data.title }}</mat-card-title>
     <mat-card-subtitle>{{ data.name }}</mat-card-subtitle>
     <mat-card-content>
-      <table class="mb-2">
-        <tr>
-          <td>Type</td>
-          <td>
-            <select class="ms-2" (change)="changeNodeType($event)">
-              <option *ngFor="let nodeType of nodeTypes" [selected]="data.nodeType === nodeType">
-                {{ nodeType }}
-              </option>
-            </select>
-          </td>
-        </tr>
-      </table>
-      <mat-divider></mat-divider>
+
+      <mat-button-toggle-group (change)="changeNodeType($event)" [value]="data.nodeType">
+        <mat-button-toggle *ngFor="let nodeType of nodeTypes" [value]="nodeType">{{ nodeType }}</mat-button-toggle>
+      </mat-button-toggle-group>
 
       <div class="mb-2" *ngIf="data.nodeType === 'detector'">
         <div *ngIf="!data.isEditing">
@@ -31,8 +22,10 @@
           <input class="ms-2" type="button" value="Save" (click)="saveDetector()">
         </div>
       </div>
-      <div *ngIf="data.nodeType === 'kustoQuery'">
-        <input class="mt-3" type="button" value="Configure Kusto Query" (click)="configureKustoQuery()">
+      <div *ngIf="data.nodeType === 'kustoQuery'" class="mt-2 mb-2">
+        <button mat-raised-button color="primary" (click)="configureKustoQuery()" [disabled]="isDisabled()">Configure
+          Kusto Query
+        </button>
       </div>
       <mat-accordion class="mt-3">
         <mat-expansion-panel hideToggle>
