@@ -20,6 +20,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { KustoQueryDialogComponent } from './kusto-query-dialog/kusto-query-dialog.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import {MatCardModule} from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatSelectModule} from '@angular/material/select';
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -44,6 +48,10 @@ import { MonacoEditorModule } from 'ngx-monaco-editor';
     MatDialogModule,
     MatButtonModule,
     MatExpansionModule,
+    MatCardModule,
+    MatDividerModule,
+    MatSelectModule,
+    MatMenuModule,
     MonacoEditorModule.forRoot() // use forRoot() in main app module only.
   ],
   providers: [
