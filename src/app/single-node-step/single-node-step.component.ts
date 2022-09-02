@@ -37,6 +37,11 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
     this._flowHelperService.addDetector(this);
   }
 
+  changeDetector() {
+    let idNumber = this._flowHelperService.getIdNumberForDetector(this, this.data.detectorId);
+    this.data.name = this.data.detectorId + idNumber;
+  }
+
   saveDetector() {
     if (!this.selectedDetectors.has(this.id)) {
       this.selectedDetectors.set(this.id, this.detectors[0]);
