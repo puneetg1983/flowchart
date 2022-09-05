@@ -35,6 +35,7 @@ export class workflowNodeData {
   isEditing: boolean = false;
   isEditingTitle: boolean = false;
   queryText: string = '';
+  markdownText: string = '';
   completionOptions: string[] = [];
   promptType: promptType = promptType.automatic;
   status: nodeStatus = nodeStatus.info;

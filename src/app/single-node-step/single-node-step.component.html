@@ -23,6 +23,11 @@
           Kusto Query
         </button>
       </div>
+      <div *ngIf="data.nodeType === 'markdown'" class="mt-2 mb-2">
+        <angular-markdown-editor textareaId="editor1" rows="12" name="markdownText" [options]="editorOptions"
+          [(ngModel)]="data.markdownText">
+        </angular-markdown-editor>
+      </div>
       <mat-accordion>
         <mat-expansion-panel hideToggle>
           <mat-expansion-panel-header>

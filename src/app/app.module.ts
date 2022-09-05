@@ -20,11 +20,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { KustoQueryDialogComponent } from './kusto-query-dialog/kusto-query-dialog.component';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
-import {MatCardModule} from '@angular/material/card';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatSelectModule} from '@angular/material/select';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatButtonToggleModule} from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { AngularMarkdownEditorModule } from 'angular-markdown-editor';
+import { MarkdownModule } from 'ngx-markdown';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,12 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatSelectModule,
     MatMenuModule,
     MatButtonToggleModule,
+    AngularMarkdownEditorModule.forRoot({
+      // add any Global Options/Config you might want
+      // to avoid passing the same options over and over in each components of your App
+      iconlibrary: 'glyph'
+    }),
+    MarkdownModule.forRoot(),
     MonacoEditorModule.forRoot() // use forRoot() in main app module only.
   ],
   providers: [

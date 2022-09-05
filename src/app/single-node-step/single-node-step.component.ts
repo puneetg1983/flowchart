@@ -1,9 +1,11 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
+import { NgFlowchart, NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
+import { EditorInstance, EditorOption } from 'angular-markdown-editor';
 import { FlowHelperService } from 'src/services/FlowHelperService';
 import { KustoQueryDialogComponent } from '../kusto-query-dialog/kusto-query-dialog.component';
 import { nodeType, workflowNodeData } from '../models/workflowNode';
+import { MarkdownService } from 'ngx-markdown';
 
 
 @Component({
@@ -16,7 +18,7 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   @Input() data: workflowNodeData;
   _flowHelperService: FlowHelperService;
 
-  constructor(flowHelperService: FlowHelperService, private matDialog: MatDialog) {
+  constructor(flowHelperService: FlowHelperService, private matDialog: MatDialog, private markdownService: MarkdownService) {
     super();
     this._flowHelperService = flowHelperService;
   }
@@ -25,8 +27,24 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
   selectedDetectors = new Map<string, string>();
   defaultQueryText: string = "<YOUR_TABLE_NAME>\n| where {Utilities.TimeAndTenantFilterQuery(cxt.StartTime, cxt.EndTime, cxt.Resource)}\n| <YOUR_QUERY>";
+  defaultMarkdownText:string = "**Sample Text** to be used as markdown. Use any custom `variables` defined in variables section as {YourVariableName}";
+  editorOptions: EditorOption;
+  bsEditorInstance: EditorInstance;
 
   ngOnInit(): void {
+
+    this.editorOptions = {
+      autofocus: false,
+      iconlibrary: 'fa',
+      savable: false,
+      onShow: (e) => this.bsEditorInstance = e,
+      parser: (val) => this.parse(val)
+    };
+  }
+
+  parse(inputValue: string) {
+    const markedOutput = this.markdownService.compile(inputValue.trim());
+    return markedOutput;
   }
 
   isDisabled() {
@@ -68,6 +86,9 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
       this.data.name = this.data.detectorId + idNumber;
     }
 
+    if (this.data.nodeType === nodeType.markdown && this.data.markdownText === ''){
+      this.data.markdownText = this.defaultMarkdownText;
+    }
   }
 
   editDetector() {
@@ -100,6 +121,10 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
         this.data.queryText = queryText;
       }
     });
+  }
+
+  canDrop(dropEvent: NgFlowchart.DropTarget): boolean {
+    return false;
   }
 
 }
