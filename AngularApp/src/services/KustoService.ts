@@ -30,7 +30,7 @@ export class KustoService {
     }
 
     execute(kustoQuery: kustoQuery): Observable<HttpResponse<DataTableResponseObject>> {
-        let request = this._httpClient.post<DataTableResponseObject>('https://localhost:7102/api/kusto/execute', kustoQuery, {
+        let request = this._httpClient.post<DataTableResponseObject>('/api/kusto/execute', kustoQuery, {
             headers: this._getHeaders(),
             observe: 'response'
         });
