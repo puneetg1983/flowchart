@@ -72,7 +72,7 @@ jobs:
           name: node-app
           path: ./wwwroot
       
-      - name: Display structure of downloaded files
+      - name: Display Structure of downloaded files
         run: ls -ltR
 
       - name: Deploy to Azure Web App
