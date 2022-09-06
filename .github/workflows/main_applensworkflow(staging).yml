@@ -35,6 +35,8 @@ jobs:
           cd AngularApp
           npm install --legacy-peer-deps
           npm run build --if-present
+          pwd
+          ls -ltr
 
       - name: dotnet publish
         run: dotnet publish WorkflowBackend/WorkflowBackend.csproj -c Release -o ${{env.DOTNET_ROOT}}/WorkflowBackend
