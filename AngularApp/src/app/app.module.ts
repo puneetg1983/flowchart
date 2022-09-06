@@ -27,6 +27,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { AngularMarkdownEditorModule } from 'angular-markdown-editor';
 import { MarkdownModule } from 'ngx-markdown';
+import { KustoService } from 'src/services/KustoService';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -56,6 +58,7 @@ import { MarkdownModule } from 'ngx-markdown';
     MatSelectModule,
     MatMenuModule,
     MatButtonToggleModule,
+    MatTableModule,
     AngularMarkdownEditorModule.forRoot({
       // add any Global Options/Config you might want
       // to avoid passing the same options over and over in each components of your App
@@ -65,7 +68,8 @@ import { MarkdownModule } from 'ngx-markdown';
     MonacoEditorModule.forRoot() // use forRoot() in main app module only.
   ],
   providers: [
-    FlowHelperService
+    FlowHelperService,
+    KustoService
   ],
   bootstrap: [AppComponent]
 })

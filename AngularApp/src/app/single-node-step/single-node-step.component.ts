@@ -26,7 +26,7 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   nodeTypes: string[] = Object.keys(nodeType);
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
   selectedDetectors = new Map<string, string>();
-  defaultQueryText: string = "<YOUR_TABLE_NAME>\n| where {Utilities.TimeAndTenantFilterQuery(cxt.StartTime, cxt.EndTime, cxt.Resource)}\n| <YOUR_QUERY>";
+  defaultQueryText: string = "RoleInstanceHeartbeat\n| where TIMESTAMP > ago(1h)\n| take 5\n| project TIMESTAMP, Details, BuildVersion, OSVersion";
   defaultMarkdownText:string = "**Sample Text** to be used as markdown. Use any custom `variables` defined in variables section as {YourVariableName}";
   editorOptions: EditorOption;
   bsEditorInstance: EditorInstance;

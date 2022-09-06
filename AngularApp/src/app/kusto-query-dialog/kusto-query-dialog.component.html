@@ -3,7 +3,34 @@
     <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
 </mat-dialog-content>
 
+<mat-table *ngIf="dataSource.length > 0" #table [dataSource]="dataSource" class="mat-elevation-z8">
+    <ng-container *ngFor="let disCol of displayedColumns; let colIndex = index" matColumnDef="{{disCol}}">
+        <mat-header-cell *matHeaderCellDef>{{disCol}}</mat-header-cell>
+        <mat-cell *matCellDef="let element; let elementIndex = index " (click)="clickCell(elementIndex, disCol)">
+            {{element[disCol]}}
+        </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>
+
+<div *ngIf="variables.length > 0" class="mt-2">
+    <table class="table table-bordered">
+        <tr>
+            <th>Variable Name</th>
+            <th>Variable Value</th>
+        </tr>
+        <tr *ngFor="let v of variables">
+            <td>{{v.name}}</td>
+            <td>{{v.value}}</td>
+        </tr>
+    </table>
+</div>
+
 <mat-dialog-actions>
-    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <button mat-raised-button color="primary" (click)="executeQuery()">Execute</button>
+    <button class="ml-2" mat-raised-button color="primary" (click)="save()"
+        [disabled]="dataSource.length === 0">Save</button>
     <button class="ml-2" mat-raised-button color="warn" (click)="close()">Cancel</button>
 </mat-dialog-actions>
