@@ -1,9 +1,12 @@
 <div class="card" [attr.name]="data.name" #card #canvasContent>
-    <div>
-        <strong style="float: left;">Default</strong>
-    </div>
-    <div>If no case contains a matching value</div>
-    <div class="mt-3 ms-2">
-        <input type="button" value="Add Detector" (click)="addDetector()" [disabled]="isDisabled()">
-    </div>
+    <mat-card>
+        <mat-card-content>
+            <mat-card-title>Default</mat-card-title>
+            <div>If no case contains a matching value</div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary" (click)="addDetector()" [disabled]="isDisabled()" mat-button>Add
+                Detector</button>
+        </mat-card-actions>
+    </mat-card>
 </div>

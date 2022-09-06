@@ -207,31 +207,14 @@ export class FlowHelperService {
         let switchCaseDataNode = new workflowNodeData();
         switchCaseDataNode.name = "switchCase";
 
-        let defaultCaseNode = switchCondtionNode.children[switchCondtionNode.children.length - 1];
-        let defaultCaseNodeChildren = defaultCaseNode.children;
-
-        //
-        // TODO :: This will currently delete all the child elements 
-        // (if any) on the default case node. Handle this situation 
-        // later
-        //
-        defaultCaseNode.destroy(true);
-
+        let switchCaseIndex = switchCondtionNode.children.length - 2;
         switchCondtionNode.addChild({
             template: SwitchCaseStepComponent,
             type: 'switchCase',
             data: switchCaseDataNode
         }, {
-            sibling: true
-        }).then((unused) => {
-
-            switchCondtionNode.addChild({
-                template: SwitchCaseDefaultStepComponent,
-                type: 'switchCaseDefault',
-                data: defaultCaseNode.data
-            }, {
-                sibling: true
-            });
+            sibling: true,
+            index: switchCaseIndex
         });
     }
 
