@@ -16,10 +16,35 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(cors =>
+            cors
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowAnyOrigin()
+            .WithExposedHeaders(new string[] { HeaderConstants.ScriptEtagHeader })
+            );
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Use(async (context, next) =>
+{
+    await next();
+    if (context.Response.StatusCode == 404 &&
+        !Path.HasExtension(context.Request.Path.Value)
+        && context.Request.Path != null
+        && context.Request.Path.Value != null
+        && !context.Request.Path.Value.StartsWith("/api/"))
+    {
+        context.Request.Path = "/index.html";
+        await next();
+    }
+});
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
 
 app.Run();
