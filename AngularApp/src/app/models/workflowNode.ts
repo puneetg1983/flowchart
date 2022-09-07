@@ -26,6 +26,12 @@ export class workflowNode {
   children: workflowNode[];
 }
 
+export interface stepVariable {
+  name: string;
+  type: string;
+  value: string;
+}
+
 export class workflowNodeData {
   name: string = '';
   title: string = '';
@@ -35,6 +41,7 @@ export class workflowNodeData {
   isEditing: boolean = false;
   isEditingTitle: boolean = false;
   queryText: string = '';
+  variables: stepVariable[] = [];
   markdownText: string = '';
   completionOptions: string[] = [];
   promptType: promptType = promptType.automatic;

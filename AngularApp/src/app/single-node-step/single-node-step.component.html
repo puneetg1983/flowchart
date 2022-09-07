@@ -1,5 +1,5 @@
 <div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
-  <mat-card style="width: 550px;">
+  <mat-card style="min-width: 550px;">
     <mat-card-title>{{ data.title }}</mat-card-title>
     <mat-card-subtitle>{{ data.name }}</mat-card-subtitle>
     <mat-card-content>
@@ -28,37 +28,22 @@
           [(ngModel)]="data.markdownText">
         </angular-markdown-editor>
       </div>
-      <mat-accordion>
-        <mat-expansion-panel hideToggle>
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Define Variables
-            </mat-panel-title>
-            <mat-panel-description>
-              Variables can be used in conditions in workflow
-            </mat-panel-description>
-          </mat-expansion-panel-header>
-          <table>
-            <tr>
-              <th>Name</th>
-              <th>DataType</th>
-              <th>Value</th>
-            </tr>
-            <tr>
-              <td><input type="text"></td>
-              <td>
-                <select>
-                  <option>String</option>
-                  <option>Int</option>
-                  <option>Double</option>
-                  <option>Boolean</option>
-                </select>
-              </td>
-              <td><input type="text"></td>
-            </tr>
-          </table>
-        </mat-expansion-panel>
-      </mat-accordion>
+
+
+      <table *ngIf="variables.length > 0" class="table table-bordered table-responsive">
+        <tr>
+          <th>Name</th>
+          <th>DataType</th>
+          <th>Value</th>
+        </tr>
+        <tr *ngFor="let v of variables">
+          <td>{{ v.name }}</td>
+          <td>{{ v.type }}</td>
+          <td>{{ v.value }}</td>
+        </tr>
+
+      </table>
+
     </mat-card-content>
 
     <mat-card-actions>

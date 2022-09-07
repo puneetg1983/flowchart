@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { kustoQuery, KustoService } from 'src/services/KustoService';
+import { DataTableResponseColumn, kustoQuery, KustoService } from 'src/services/KustoService';
+import { stepVariable } from '../models/workflowNode';
 
 @Component({
   selector: 'app-kusto-query-dialog',
@@ -9,13 +10,15 @@ import { kustoQuery, KustoService } from 'src/services/KustoService';
 })
 export class KustoQueryDialogComponent implements OnInit {
 
+  // More editor options at https://github.com/Microsoft/vscode/issues/30795#issuecomment-410998882
   editorOptions = { theme: 'vs-dark', language: 'text/plain', minimap: { enabled: false } };
   code: string = '';
-  displayedColumns: string[] = [];
+  displayedColumns: DataTableResponseColumn[] = [];
   dataSource: any[] = [];
-  variables: any[] = [];
+  variables: stepVariable[] = [];
   isExecutingQuery: boolean = false;
   error: string = '';
+  kustoQueryLabel: string = 'YourKustoQueryLabel';
 
   constructor(@Inject(MAT_DIALOG_DATA) data: { queryText: string }, public dialogRef: MatDialogRef<KustoQueryDialogComponent>,
     private _kustoService: KustoService) {
@@ -26,11 +29,11 @@ export class KustoQueryDialogComponent implements OnInit {
   }
 
   close() {
-    this.dialogRef.close('');
+    this.dialogRef.close({ queryText: '', variables: [] });
   }
 
   save() {
-    this.dialogRef.close(encodeURI(this.code));
+    this.dialogRef.close({ queryText: encodeURI(this.code), variables: this.variables });
   }
 
   executeQuery() {
@@ -49,13 +52,13 @@ export class KustoQueryDialogComponent implements OnInit {
       this.isExecutingQuery = false;
       this.displayedColumns = [];
       resp.body.columns.forEach(entry => {
-        this.displayedColumns.push(entry.columnName);
+        this.displayedColumns.push(entry);
       })
 
       for (var i = 0; i < resp.body.rows.length; i++) {
         let obj = {};
         for (var j = 0; j < resp.body.rows[i].length; j++) {
-          obj[this.displayedColumns[j]] = resp.body.rows[i][j];
+          obj[this.displayedColumns[j].columnName] = resp.body.rows[i][j];
         }
         this.dataSource.push(obj);
       }
@@ -70,13 +73,33 @@ export class KustoQueryDialogComponent implements OnInit {
     });
   }
 
-  clickCell(rowIndex, colName) {
-    let value = 'this.rows[' + rowIndex + '][\"' + colName + '\"]';
-    let name = 'kustoQuery1_' + colName + '_Row' + rowIndex;
+  clickCell(rowIndex: number, col: DataTableResponseColumn) {
+    let value = "this.rows[" + rowIndex + "]['" + col.columnName + "']";
+    let name = this.kustoQueryLabel + '_Row' + rowIndex + '_' + col.columnName;
 
-    if (this.variables.findIndex(x => x.name === name) === -1) {
-      this.variables.push({ name: name, value: value });
+    const newVariableArray: stepVariable[] = [];
+    this.variables.forEach(element => {
+      newVariableArray.push(element);
+    })
+
+    if (newVariableArray.findIndex(x => x.name === name) === -1) {
+      newVariableArray.push({
+        name: name,
+        value: value,
+        type: col.dataType
+      });
     }
+
+    this.variables = [...newVariableArray]; // refresh the dataSource
+  }
+
+  getColumnNames(displayedColumns: DataTableResponseColumn[]): string[] {
+    let colNames: string[] = [];
+    displayedColumns.forEach(col => {
+      colNames.push(col.columnName);
+    });
+
+    return colNames;
   }
 
 }

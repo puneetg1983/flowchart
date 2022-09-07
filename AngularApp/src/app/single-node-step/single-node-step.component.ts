@@ -4,9 +4,8 @@ import { NgFlowchart, NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart'
 import { EditorInstance, EditorOption } from 'angular-markdown-editor';
 import { FlowHelperService } from 'src/services/FlowHelperService';
 import { KustoQueryDialogComponent } from '../kusto-query-dialog/kusto-query-dialog.component';
-import { nodeType, workflowNodeData } from '../models/workflowNode';
+import { nodeType, stepVariable, workflowNodeData } from '../models/workflowNode';
 import { MarkdownService } from 'ngx-markdown';
-
 
 @Component({
   selector: 'single-node-step',
@@ -27,9 +26,10 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
   selectedDetectors = new Map<string, string>();
   defaultQueryText: string = "RoleInstanceHeartbeat\n| where TIMESTAMP > ago(1h)\n| take 5\n| project TIMESTAMP, Details, BuildVersion, OSVersion";
-  defaultMarkdownText:string = "**Sample Text** to be used as markdown. Use any custom `variables` defined in variables section as {YourVariableName}";
+  defaultMarkdownText: string = "**Sample Text** to be used as markdown. Use any custom `variables` defined in variables section as {YourVariableName}";
   editorOptions: EditorOption;
   bsEditorInstance: EditorInstance;
+  variables: stepVariable[] = [];
 
   ngOnInit(): void {
 
@@ -86,7 +86,7 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
       this.data.name = this.data.detectorId + idNumber;
     }
 
-    if (this.data.nodeType === nodeType.markdown && this.data.markdownText === ''){
+    if (this.data.nodeType === nodeType.markdown && this.data.markdownText === '') {
       this.data.markdownText = this.defaultMarkdownText;
     }
   }
@@ -113,13 +113,22 @@ export class SingleNodeStepComponent extends NgFlowchartStepComponent implements
 
   configureKustoQuery() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.height = '600px';
-    dialogConfig.width = '900px';
+    dialogConfig.height = "calc(100% - 30px)";
+    dialogConfig.width = "calc(100% - 30px)";
+    dialogConfig.maxWidth = "100%";
+    dialogConfig.maxHeight = "100%";
+    dialogConfig.disableClose = true;
+
     this.data.queryText !== '' ? dialogConfig.data = { queryText: this.data.queryText } : dialogConfig.data = { queryText: this.defaultQueryText }
-    this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(queryText => {
-      if (queryText !== '') {
-        this.data.queryText = queryText;
+    this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(modelData => {
+      if (modelData.queryText !== '') {
+        this.data.queryText = modelData.queryText;
       }
+
+      if (modelData.variables.length > 0) {
+        this.variables = this.variables.concat(modelData.variables);
+      }
+      this.data.variables = this.variables;
     });
   }
 

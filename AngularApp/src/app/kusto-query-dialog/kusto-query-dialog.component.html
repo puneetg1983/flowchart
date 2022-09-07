@@ -1,38 +1,58 @@
-<h2 mat-dialog-title>Specify Kusto Query</h2>
+<h3 mat-dialog-title>Specify Kusto Query</h3>
 <mat-dialog-content>
-    <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+    <form>
+        <div class="mb-3">
+            <label for="idQueryLabel" class="form-label">Enter label for the Kusto Query</label>
+            <input class="form-control" [(ngModel)]="kustoQueryLabel" name="queryLabel" id="idQueryLabel" placeholder="Enter label for the Kusto Query">
+        </div>
+        <div class="mb-3">
+            <label for="idQueryLabel" class="form-label">Enter query text</label>
+            <ngx-monaco-editor class="form-control" [options]="editorOptions" name="monacoEditor" [(ngModel)]="code">
+            </ngx-monaco-editor>
 
-    <i *ngIf="isExecutingQuery" class="fa fa-gear fa-spin fa-4x"></i>
+            <i *ngIf="isExecutingQuery" class="fa fa-gear fa-spin fa-4x"></i>
+            <div *ngIf="error" class="error-details">
+                <i class="fa health-icon fa-times-circle unhealthy-icon-color" aria-hidden="true"></i>
+                <span> {{ error }}</span>
+            </div>
+        </div>
+        <div class="mb-3" *ngIf="dataSource.length > 0">
+            <label for="idQueryOutput" class="form-label">Click a cell to create a variable</label>
+            <mat-table id="idQueryOutput" #table [dataSource]="dataSource" class="mat-elevation-z8">
+                <ng-container *ngFor="let disCol of displayedColumns; let colIndex = index" matColumnDef="{{disCol.columnName}}">
+                    <mat-header-cell *matHeaderCellDef>{{disCol.columnName}}</mat-header-cell>
+                    <mat-cell *matCellDef="let element; let elementIndex = index "
+                        (click)="clickCell(elementIndex, disCol)">
+                        {{element[disCol.columnName]}}
+                    </mat-cell>
+                </ng-container>
 
-    <div *ngIf="error" class="error-details">
-        <i class="fa health-icon fa-times-circle unhealthy-icon-color" aria-hidden="true"></i>
-        <span> {{ error }}</span>
-    </div>
+                <mat-header-row *matHeaderRowDef="getColumnNames(displayedColumns)"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: getColumnNames(displayedColumns);"></mat-row>
+            </mat-table>
+        </div>
+        <div class="mb-3" *ngIf="variables.length > 0" class="mt-2">
+            <table style="width: 100%;" mat-table [dataSource]="variables" class="mat-elevation-z8">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Variable Name </th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                </ng-container>
 
-    <mat-table *ngIf="dataSource.length > 0" #table [dataSource]="dataSource" class="mat-elevation-z8">
-        <ng-container *ngFor="let disCol of displayedColumns; let colIndex = index" matColumnDef="{{disCol}}">
-            <mat-header-cell *matHeaderCellDef>{{disCol}}</mat-header-cell>
-            <mat-cell *matCellDef="let element; let elementIndex = index " (click)="clickCell(elementIndex, disCol)">
-                {{element[disCol]}}
-            </mat-cell>
-        </ng-container>
+                <ng-container matColumnDef="type">
+                    <th mat-header-cell *matHeaderCellDef>DataType</th>
+                    <td mat-cell *matCellDef="let element"> {{element.type}} </td>
+                </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
+                <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef>Value</th>
+                    <td mat-cell *matCellDef="let element"> {{element.value}} </td>
+                </ng-container>
 
-    <div *ngIf="variables.length > 0" class="mt-2">
-        <table class="table table-bordered">
-            <tr>
-                <th>Variable Name</th>
-                <th>Variable Value</th>
-            </tr>
-            <tr *ngFor="let v of variables">
-                <td>{{v.name}}</td>
-                <td>{{v.value}}</td>
-            </tr>
-        </table>
-    </div>
+                <tr mat-header-row *matHeaderRowDef="['name','type','value']"></tr>
+                <tr mat-row *matRowDef="let row; columns: ['name','type','value'];"></tr>
+            </table>
+        </div>
+    </form>
 </mat-dialog-content>
 
 <mat-dialog-actions>
