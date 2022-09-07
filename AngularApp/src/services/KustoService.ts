@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { Injectable } from "@angular/core";
+import { Injectable, isDevMode } from "@angular/core";
 import { Observable } from "rxjs";
 
 export interface kustoQuery {
@@ -26,11 +26,16 @@ export interface DataTableResponseColumn {
 @Injectable()
 export class KustoService {
 
+    serviceUrl: string = '/api/kusto/execute';
+
     constructor(private _httpClient: HttpClient) {
+        if (isDevMode()) {
+            this.serviceUrl = 'https://localhost:7102/api/kusto/execute'
+        }
     }
 
     execute(kustoQuery: kustoQuery): Observable<HttpResponse<DataTableResponseObject>> {
-        let request = this._httpClient.post<DataTableResponseObject>('/api/kusto/execute', kustoQuery, {
+        let request = this._httpClient.post<DataTableResponseObject>(this.serviceUrl, kustoQuery, {
             headers: this._getHeaders(),
             observe: 'response'
         });
