@@ -1,32 +1,39 @@
 <h2 mat-dialog-title>Specify Kusto Query</h2>
 <mat-dialog-content>
     <ngx-monaco-editor [options]="editorOptions" [(ngModel)]="code"></ngx-monaco-editor>
+
+    <i *ngIf="isExecutingQuery" class="fa fa-gear fa-spin fa-4x"></i>
+
+    <div *ngIf="error" class="error-details">
+        <i class="fa health-icon fa-times-circle unhealthy-icon-color" aria-hidden="true"></i>
+        <span> {{ error }}</span>
+    </div>
+
+    <mat-table *ngIf="dataSource.length > 0" #table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container *ngFor="let disCol of displayedColumns; let colIndex = index" matColumnDef="{{disCol}}">
+            <mat-header-cell *matHeaderCellDef>{{disCol}}</mat-header-cell>
+            <mat-cell *matCellDef="let element; let elementIndex = index " (click)="clickCell(elementIndex, disCol)">
+                {{element[disCol]}}
+            </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <div *ngIf="variables.length > 0" class="mt-2">
+        <table class="table table-bordered">
+            <tr>
+                <th>Variable Name</th>
+                <th>Variable Value</th>
+            </tr>
+            <tr *ngFor="let v of variables">
+                <td>{{v.name}}</td>
+                <td>{{v.value}}</td>
+            </tr>
+        </table>
+    </div>
 </mat-dialog-content>
-
-<mat-table *ngIf="dataSource.length > 0" #table [dataSource]="dataSource" class="mat-elevation-z8">
-    <ng-container *ngFor="let disCol of displayedColumns; let colIndex = index" matColumnDef="{{disCol}}">
-        <mat-header-cell *matHeaderCellDef>{{disCol}}</mat-header-cell>
-        <mat-cell *matCellDef="let element; let elementIndex = index " (click)="clickCell(elementIndex, disCol)">
-            {{element[disCol]}}
-        </mat-cell>
-    </ng-container>
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-</mat-table>
-
-<div *ngIf="variables.length > 0" class="mt-2">
-    <table class="table table-bordered">
-        <tr>
-            <th>Variable Name</th>
-            <th>Variable Value</th>
-        </tr>
-        <tr *ngFor="let v of variables">
-            <td>{{v.name}}</td>
-            <td>{{v.value}}</td>
-        </tr>
-    </table>
-</div>
 
 <mat-dialog-actions>
     <button mat-raised-button color="primary" (click)="executeQuery()">Execute</button>

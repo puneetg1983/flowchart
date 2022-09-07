@@ -14,6 +14,8 @@ export class KustoQueryDialogComponent implements OnInit {
   displayedColumns: string[] = [];
   dataSource: any[] = [];
   variables: any[] = [];
+  isExecutingQuery: boolean = false;
+  error: string = '';
 
   constructor(@Inject(MAT_DIALOG_DATA) data: { queryText: string }, public dialogRef: MatDialogRef<KustoQueryDialogComponent>,
     private _kustoService: KustoService) {
@@ -41,7 +43,10 @@ export class KustoQueryDialogComponent implements OnInit {
       EndTime: ''
     };
 
+    this.error = '';
+    this.isExecutingQuery = true;
     this._kustoService.execute(kustoQuery).subscribe(resp => {
+      this.isExecutingQuery = false;
       this.displayedColumns = [];
       resp.body.columns.forEach(entry => {
         this.displayedColumns.push(entry.columnName);
@@ -55,6 +60,13 @@ export class KustoQueryDialogComponent implements OnInit {
         this.dataSource.push(obj);
       }
 
+    }, error => {
+      this.isExecutingQuery = false;
+      if (error.error) {
+        this.error = error.error;
+      } else {
+        this.error = JSON.stringify(error);
+      }
     });
   }
 

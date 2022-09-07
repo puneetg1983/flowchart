@@ -29,6 +29,7 @@ import { AngularMarkdownEditorModule } from 'angular-markdown-editor';
 import { MarkdownModule } from 'ngx-markdown';
 import { KustoService } from 'src/services/KustoService';
 import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -59,6 +60,7 @@ import { MatTableModule } from '@angular/material/table';
     MatMenuModule,
     MatButtonToggleModule,
     MatTableModule,
+    MatProgressSpinnerModule,
     AngularMarkdownEditorModule.forRoot({
       // add any Global Options/Config you might want
       // to avoid passing the same options over and over in each components of your App

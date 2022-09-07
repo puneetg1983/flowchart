@@ -22,7 +22,10 @@ namespace WorkflowBackend.Controllers
         public async Task<IActionResult> Execute([FromBody] KustoCallBody body)
         {
             GetDateTimes(body.StartTime, body.EndTime, out DateTime startDateTime, out DateTime endDateTime);
-            var result = await _kustoService.ExecuteQueryAsync(
+
+            try
+            {
+                var result = await _kustoService.ExecuteQueryAsync(
                 body.ClusterName,
                 body.DatabaseName,
                 body.QueryText,
@@ -30,12 +33,22 @@ namespace WorkflowBackend.Controllers
                 startDateTime,
                 endDateTime);
 
-            if (result == null)
-            {
-                return Ok();
-            }
+                if (result == null)
+                {
+                    return Ok();
+                }
 
-            return Ok(result.ToDataTableResponseObject());
+                return Ok(result.ToDataTableResponseObject());
+            }
+            catch (SemanticException kustoEx)
+            {
+                return BadRequest(kustoEx.SemanticErrors);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            
         }
 
         private static void GetDateTimes(string? startTime, string? endTime, out DateTime startDateTime, out DateTime endDateTime)
