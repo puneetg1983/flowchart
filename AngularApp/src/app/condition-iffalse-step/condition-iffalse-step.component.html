@@ -10,6 +10,9 @@
             <div class="msla-card-title">If false</div>
         </a>
     </div>
-    <input class="mt-3 ms-2" type="button" value="Add Detector" (click)="addDetector()"
-        [disabled]="isDisabled()">
+    <div class="ms-2 mt-4">
+        <app-node-actions [isConditionNode]="true" (onNodeAdded)="addNode($event)"
+            (onConditionAdded)="addCondition($event)" (onDeleted)="deleteNode()" [isDisabled]="isDisabled()">
+        </app-node-actions>
+    </div>
 </div>

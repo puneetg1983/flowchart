@@ -6,7 +6,6 @@ import { NgFlowchartModule } from '@joelwenzel/ng-flowchart';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Ng2CompleterModule } from "ng2-completer";
-import { SingleNodeStepComponent } from './single-node-step/single-node-step.component';
 import { ConditionStepComponent } from './condition-step/condition-step.component';
 import { ConditionIftrueStepComponent } from './condition-iftrue-step/condition-iftrue-step.component';
 import { ConditionIffalseStepComponent } from './condition-iffalse-step/condition-iffalse-step.component';
@@ -30,18 +29,25 @@ import { MarkdownModule } from 'ngx-markdown';
 import { KustoService } from 'src/services/KustoService';
 import { MatTableModule } from '@angular/material/table';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { DetectorNodeComponent } from './detector-node/detector-node.component';
+import { KustoNodeComponent } from './kusto-node/kusto-node.component';
+import { MarkdownNodeComponent } from './markdown-node/markdown-node.component';
+import { NodeActionsComponent } from './node-actions/node-actions.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    SingleNodeStepComponent,
     ConditionStepComponent,
     ConditionIftrueStepComponent,
     ConditionIffalseStepComponent,
     SwitchStepComponent,
     SwitchCaseStepComponent,
     SwitchCaseDefaultStepComponent,
-    KustoQueryDialogComponent
+    KustoQueryDialogComponent,
+    DetectorNodeComponent,
+    KustoNodeComponent,
+    MarkdownNodeComponent,
+    NodeActionsComponent
   ],
   imports: [
     BrowserModule,

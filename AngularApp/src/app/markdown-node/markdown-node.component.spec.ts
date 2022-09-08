@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SingleNodeStepComponent } from './single-node-step.component';
+import { MarkdownNodeComponent } from './markdown-node.component';
 
-describe('SingleNodeStepComponent', () => {
-  let component: SingleNodeStepComponent;
-  let fixture: ComponentFixture<SingleNodeStepComponent>;
+describe('MarkdownNodeComponent', () => {
+  let component: MarkdownNodeComponent;
+  let fixture: ComponentFixture<MarkdownNodeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SingleNodeStepComponent ]
+      declarations: [ MarkdownNodeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SingleNodeStepComponent);
+    fixture = TestBed.createComponent(MarkdownNodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

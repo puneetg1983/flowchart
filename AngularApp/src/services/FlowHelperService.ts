@@ -1,10 +1,13 @@
 import { Injectable } from "@angular/core";
 import { NgFlowchartStepComponent } from "@joelwenzel/ng-flowchart";
+import { MarkdownComponent } from "ngx-markdown";
 import { ConditionIffalseStepComponent } from "src/app/condition-iffalse-step/condition-iffalse-step.component";
 import { ConditionIftrueStepComponent } from "src/app/condition-iftrue-step/condition-iftrue-step.component";
 import { ConditionStepComponent } from "src/app/condition-step/condition-step.component";
-import { workflowNode, workflowNodeData } from "src/app/models/workflowNode";
-import { SingleNodeStepComponent } from "src/app/single-node-step/single-node-step.component";
+import { DetectorNodeComponent } from "src/app/detector-node/detector-node.component";
+import { KustoNodeComponent } from "src/app/kusto-node/kusto-node.component";
+import { MarkdownNodeComponent } from "src/app/markdown-node/markdown-node.component";
+import { nodeType, workflowNode, workflowNodeData } from "src/app/models/workflowNode";
 import { SwitchCaseDefaultStepComponent } from "src/app/switch-case-default-step/switch-case-default-step.component";
 import { SwitchCaseStepComponent } from "src/app/switch-case-step/switch-case-step.component";
 import { SwitchStepComponent } from "src/app/switch-step/switch-step.component";
@@ -22,40 +25,77 @@ export class FlowHelperService {
         node.destroy(true);
     }
 
-    addDetector(node: NgFlowchartStepComponent<any>) {
-        let dataNode = this.getNewDetectorNode(node, this.detectors[0]);
-        node.addChild({
-            template: SingleNodeStepComponent,
-            type: 'detector',
-            data: dataNode
-        }, {
-            sibling: true
-        });
+    addNode(node: NgFlowchartStepComponent<any>, inputNodeType: nodeType) {
+
+        switch (inputNodeType) {
+            case nodeType.detector:
+                let dataNodeDetector = this.getNewDetectorNode(node, this.detectors[0]);
+                node.addChild({
+                    template: DetectorNodeComponent,
+                    type: 'detector',
+                    data: dataNodeDetector
+                }, {
+                    sibling: true
+                });
+                break;
+
+            case nodeType.kustoQuery:
+                let dataNodeKustoQuery = this.getNewNode(node, 'kustoQuery');
+                node.addChild({
+                    template: KustoNodeComponent,
+                    type: 'kustoQuery',
+                    data: dataNodeKustoQuery
+                }, {
+                    sibling: true
+                });
+                break;
+
+            case nodeType.markdown:
+                let dataNodeMarkdown = this.getNewNode(node, 'markdown');
+                node.addChild({
+                    template: MarkdownNodeComponent,
+                    type: 'markdown',
+                    data: dataNodeMarkdown
+                }, {
+                    sibling: true
+                });
+                break;
+
+            default:
+                break;
+        }
     }
 
     getNewDetectorNode(node: NgFlowchartStepComponent<any>, detectorId: string): workflowNodeData {
-        let idNumber = this.getIdNumberForDetector(node, detectorId);
+        let idNumber = this.getIdNumberForNode(node, detectorId);
         let wfNodeData = new workflowNodeData();
         wfNodeData.name = detectorId + idNumber;
         wfNodeData.detectorId = detectorId;
         return wfNodeData;
     }
 
-    getIdNumberForDetector(node: NgFlowchartStepComponent<any>, detectorId: string): number {
+    getNewNode(node: NgFlowchartStepComponent<any>, nodeId: string): workflowNodeData {
+        let idNumber = this.getIdNumberForNode(node, nodeId);
+        let wfNodeData = new workflowNodeData();
+        wfNodeData.name = nodeId + idNumber;
+        wfNodeData.title = wfNodeData.name + "-Title";
+        return wfNodeData;
+    }
+
+    getIdNumberForNode(node: NgFlowchartStepComponent<any>, nodeId: string): number {
         let parentNode = node;
         while (parentNode.parent != null) {
             parentNode = parentNode.parent;
         }
 
-        return this.getMaxIdForNode(detectorId, parentNode, 0) + 1;
-
+        return this.getMaxIdForNode(nodeId, parentNode, 0) + 1;
     }
 
-    getMaxIdForNode(detectorId: string, node: NgFlowchartStepComponent, num: number): number {
-        if (node.type === 'detector') {
+    getMaxIdForNode(nodeId: string, node: NgFlowchartStepComponent, num: number): number {
+        if (node.type === 'detector' || node.type === 'markdown' || node.type === 'kustoQuery') {
             let nodeName: string = node.data.name;
-            if (nodeName.startsWith(detectorId)) {
-                let intPart = nodeName.substring(detectorId.length);
+            if (nodeName.startsWith(nodeId)) {
+                let intPart = nodeName.substring(nodeId.length);
                 if (this.is_int(intPart)) {
                     let newNum = parseInt(intPart);
                     num = Math.max(num, newNum);
@@ -65,7 +105,7 @@ export class FlowHelperService {
 
         if (node.hasChildren) {
             for (var node of node.children) {
-                num = Math.max(num, this.getMaxIdForNode(detectorId, node, num));
+                num = Math.max(num, this.getMaxIdForNode(nodeId, node, num));
             }
             return num;
         } else {

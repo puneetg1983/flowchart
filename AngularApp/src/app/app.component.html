@@ -1,9 +1,30 @@
 <main>
-  <div id="canvas" ngFlowchartCanvas [ngFlowchartOptions]="options" [disabled]="disabled"></div>
   <div id="palette">
     <section>
-      <button (click)="showFlowData()">Show JSON</button>
+      <div class="btn-group dropend">
+        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Add Root Node
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li>
+            <a class="dropdown-item" [class.disabled]="isDisabled()" (click)="addNode(nodeType.detector)" href="#">Detector</a>
+          </li>
+          <li>
+            <a class="dropdown-item" [class.disabled]="isDisabled()" (click)="addNode(nodeType.kustoQuery)" href="#">Kusto
+              Query</a>
+          </li>
+          <li>
+            <a class="dropdown-item" [class.disabled]="isDisabled()" (click)="addNode(nodeType.markdown)" href="#">Markdown</a>
+          </li>
+        </ul>
+      </div>
+      <div class="mt-2">
+        <button class="btn btn-primary btn-sm" (click)="showFlowData()">Show JSON</button>
+      </div>
+
       <!-- <button (click)="showUpload()">Upload JSON</button> -->
     </section>
   </div>
+  <div id="canvas" ngFlowchartCanvas [ngFlowchartOptions]="options" [disabled]="disabled"></div>
 </main>

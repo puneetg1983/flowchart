@@ -1,0 +1,30 @@
+<div class="btn-group dropend">
+  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1"
+    data-bs-toggle="dropdown" aria-expanded="false">
+    Add
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+    <li>
+      <h6 class="dropdown-header">Conditions</h6>
+    </li>
+    <li><a class="dropdown-item" [class.disabled]="isDisabled" (click)="addCondition('ifelse')" href="#">If Else</a>
+    </li>
+    <li><a class="dropdown-item" [class.disabled]="isDisabled" (click)="addCondition('switch')" href="#">Switch
+      </a>
+    </li>
+    <li>
+      <h6 class="dropdown-header">Actions</h6>
+    </li>
+    <li><a class="dropdown-item" [class.disabled]="isDisabled" (click)="addNode(nodeType.detector)"
+        href="#">Detector</a>
+    </li>
+    <li><a class="dropdown-item" [class.disabled]="isDisabled" (click)="addNode(nodeType.kustoQuery)" href="#">Kusto
+        Query</a>
+    </li>
+    <li><a class="dropdown-item" [class.disabled]="isDisabled" (click)="addNode(nodeType.markdown)"
+        href="#">Markdown</a>
+    </li>
+  </ul>
+  <button *ngIf="!isConditionNode" type="button" class="ms-2 btn btn-danger btn-sm" (click)="deleteNode()"
+    [disabled]="isDisabled">Delete</button>
+</div>

@@ -4,8 +4,10 @@ import {
   NgFlowchartStepRegistry,
   NgFlowchart
 } from '@joelwenzel/ng-flowchart';
-import { workflow, workflowNode, workflowNodeData } from './models/workflowNode';
-import { SingleNodeStepComponent } from './single-node-step/single-node-step.component';
+import { DetectorNodeComponent } from './detector-node/detector-node.component';
+import { KustoNodeComponent } from './kusto-node/kusto-node.component';
+import { MarkdownNodeComponent } from './markdown-node/markdown-node.component';
+import { nodeType, workflow, workflowNode, workflowNodeData } from './models/workflowNode';
 
 @Component({
   selector: 'app-root',
@@ -30,6 +32,7 @@ export class AppComponent {
 
   disabled = false;
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
+  nodeType = nodeType;
 
   constructor(private stepRegistry: NgFlowchartStepRegistry) {
     this.callbacks.onDropError = this.onDropError;
@@ -37,11 +40,9 @@ export class AppComponent {
   }
 
   ngAfterViewInit() {
-    this.stepRegistry.registerStep('detector', SingleNodeStepComponent);
-    // this.stepRegistry.registerStep('condition', ConditionStepComponent);
-    // this.stepRegistry.registerStep('iftrue', ConditionIftrueStepComponent);
-    // this.stepRegistry.registerStep('iffalse', ConditionIffalseStepComponent);
-    this.showUpload();
+    this.stepRegistry.registerStep('detector', DetectorNodeComponent);
+    this.stepRegistry.registerStep('kustoQuery', KustoNodeComponent);
+    this.stepRegistry.registerStep('markdown', MarkdownNodeComponent);
   }
 
   onDropError(error: NgFlowchart.DropError) {
@@ -52,22 +53,30 @@ export class AppComponent {
     console.log(error);
   }
 
-  showUpload() {
+  addNode(type: nodeType) {
     let wf = new workflow();
     let wfNode = new workflowNode();
-    wfNode.type = "detector";
     wfNode.data = new workflowNodeData();
-    wfNode.data.name = this.detectors[0] + "1";
-    wfNode.data.detectorId = this.detectors[0];
-    wfNode.data.title = this.detectors[0] + "-Title";
-    wfNode.children = [];
 
+    if (type === nodeType.detector) {
+      wfNode.type = "detector";
+      wfNode.data.name = this.detectors[0] + "1";
+      wfNode.data.detectorId = this.detectors[0];
+      wfNode.data.title = this.detectors[0] + "-Title";
+
+    } else if (type === nodeType.kustoQuery) {
+      wfNode.type = "kustoQuery";
+      wfNode.data.name = "kustoQuery1";
+      wfNode.data.title = "kustoQuery1-Title";
+    } else if (type === nodeType.markdown) {
+      wfNode.type = "markdown";
+      wfNode.data.name = "markdown1";
+      wfNode.data.title = "markdown1-Title";
+    }
+
+    wfNode.children = [];
     wf.root = wfNode;
     this.canvas.getFlow().upload(wf);
-
-    // this.http.get("./assets/mydata.json").subscribe(data => {
-    //   this.canvas.getFlow().upload(data);
-    // });
   }
 
   showFlowData() {
@@ -87,18 +96,8 @@ export class AppComponent {
     this.canvas.getFlow().clear();
   }
 
-  onGapChanged(event) {
-    this.options = {
-      ...this.options,
-      stepGap: parseInt(event.target.value)
-    };
-  }
-
-  onSequentialChange(event) {
-    this.options = {
-      ...this.options,
-      isSequential: event.target.checked
-    };
+  isDisabled() {
+   return false;
   }
 
   onDelete(id) {
