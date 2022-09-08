@@ -22,7 +22,7 @@ export class MarkdownNodeComponent extends WorkflowNodeBaseClass implements OnIn
 
   constructor(private _markdownService: MarkdownService, private _flowHelperServicePrivate: FlowHelperService) {
     super(_flowHelperServicePrivate);
-    this.uniqueId = crypto.randomUUID().replace('-','');
+    this.uniqueId = Date.now().toString();
   }
 
   ngOnInit(): void {
