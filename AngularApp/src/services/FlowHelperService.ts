@@ -71,6 +71,7 @@ export class FlowHelperService {
         let wfNodeData = new workflowNodeData();
         wfNodeData.name = detectorId + idNumber;
         wfNodeData.detectorId = detectorId;
+        wfNodeData.title = wfNodeData.name + "-Title";
         return wfNodeData;
     }
 

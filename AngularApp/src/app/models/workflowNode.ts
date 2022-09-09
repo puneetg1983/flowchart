@@ -1,8 +1,8 @@
 export enum nodeStatus {
-  critical,
-  warning,
-  success,
-  info
+  critical = 'critical',
+  warning = 'warning',
+  success = 'success',
+  info = 'info'
 }
 
 export enum nodeType {

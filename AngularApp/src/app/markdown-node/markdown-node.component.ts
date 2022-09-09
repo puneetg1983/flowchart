@@ -3,7 +3,7 @@ import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
 import { EditorInstance, EditorOption } from 'angular-markdown-editor';
 import { MarkdownService } from 'ngx-markdown';
 import { FlowHelperService } from 'src/services/FlowHelperService';
-import { workflowNodeData } from '../models/workflowNode';
+import { promptType, workflowNodeData } from '../models/workflowNode';
 import { WorkflowNodeBaseClass } from '../node-base-class';
 
 @Component({
@@ -17,8 +17,10 @@ export class MarkdownNodeComponent extends WorkflowNodeBaseClass implements OnIn
   editorOptions: EditorOption;
   bsEditorInstance: EditorInstance;
   uniqueId: string = '';
-
+  promptTypes: string[] = [promptType.automatic, promptType.onClick];
+  
   @Input() data: workflowNodeData;
+
 
   constructor(private _markdownService: MarkdownService, private _flowHelperServicePrivate: FlowHelperService) {
     super(_flowHelperServicePrivate);

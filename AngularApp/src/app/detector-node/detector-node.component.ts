@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FlowHelperService } from 'src/services/FlowHelperService';
-import { workflowNodeData } from '../models/workflowNode';
+import { promptType, workflowNodeData } from '../models/workflowNode';
 import { WorkflowNodeBaseClass } from '../node-base-class';
 
 @Component({
@@ -12,6 +12,7 @@ export class DetectorNodeComponent extends WorkflowNodeBaseClass implements OnIn
 
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
   selectedDetectors = new Map<string, string>();
+  promptTypes: string[] = [promptType.automatic, promptType.onClick];
 
   @Input() data: workflowNodeData;
 

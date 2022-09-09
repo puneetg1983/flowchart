@@ -1,0 +1,13 @@
+<ng-container *ngIf="!data.isEditingTitle">
+  <h5>{{ data.title }}
+    <i style="float:right" class="fa fa-pencil" aria-hidden="true"
+      (click)="data.isEditingTitle = !data.isEditingTitle"></i>
+  </h5>
+</ng-container>
+<ng-container *ngIf="data.isEditingTitle">
+  <h5 class="card-title">
+    <input type="text" [(ngModel)]="data.title" name="cardTitle">
+    <i style="float:right" class="fa fa-save" aria-hidden="true"
+      (click)="data.isEditingTitle = !data.isEditingTitle"></i>
+  </h5>
+</ng-container>

@@ -34,6 +34,8 @@ import { KustoNodeComponent } from './kusto-node/kusto-node.component';
 import { MarkdownNodeComponent } from './markdown-node/markdown-node.component';
 import { NodeActionsComponent } from './node-actions/node-actions.component';
 import { ConfigureVariablesComponent } from './configure-variables/configure-variables.component';
+import { CommonNodePropertiesComponent } from './common-node-properties/common-node-properties.component';
+import { NodeTitleComponent } from './node-title/node-title.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +51,9 @@ import { ConfigureVariablesComponent } from './configure-variables/configure-var
     KustoNodeComponent,
     MarkdownNodeComponent,
     NodeActionsComponent,
-    ConfigureVariablesComponent
+    ConfigureVariablesComponent,
+    CommonNodePropertiesComponent,
+    NodeTitleComponent
   ],
   imports: [
     BrowserModule,
