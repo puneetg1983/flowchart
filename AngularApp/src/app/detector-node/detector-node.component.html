@@ -8,7 +8,7 @@
             <form>
                 <div class="mb-3">
                     <label for="chooseDetector" class="form-label">Choose detector</label>
-                    <select name="chooseDetectorSelect" class="form-select" id="chooseDetector"
+                    <select name="chooseDetectorSelect" class="form-select form-select-sm" id="chooseDetector"
                         aria-label="Choose Detector" (change)="changeDetector()" [(ngModel)]="data.detectorId">
                         <option *ngFor="let detector of detectors" [value]="detector">{{ detector }}</option>
                     </select>

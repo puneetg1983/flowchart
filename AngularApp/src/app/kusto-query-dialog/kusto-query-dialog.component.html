@@ -6,7 +6,7 @@
                 <label for="idQueryLabel" class="form-label">Enter label for the Kusto Query</label>
             </div>
             <div class="col-10">
-                <input class="form-control" [(ngModel)]="kustoQueryLabel" name="queryLabel" id="idQueryLabel"
+                <input class="form-control form-control-sm" [(ngModel)]="kustoQueryLabel" name="queryLabel" id="idQueryLabel"
                     placeholder="Enter label for the Kusto Query">
             </div>
         </div>
@@ -15,7 +15,7 @@
                 <label for="idQueryLabel" class="form-label">Enter query text</label>
             </div>
             <div class="col-10">
-                <ngx-monaco-editor class="form-control" [options]="editorOptions" name="monacoEditor"
+                <ngx-monaco-editor class="form-control form-control-sm" [options]="editorOptions" name="monacoEditor"
                     [(ngModel)]="code">
                 </ngx-monaco-editor>
                 <div class="mt-2 mb-2">

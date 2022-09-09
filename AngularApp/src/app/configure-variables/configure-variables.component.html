@@ -25,13 +25,13 @@
 <form *ngIf="isEditing">
   <div class="mb-3">
     <label for="varName" class="form-label">Enter Variable name</label>
-    <input type="text" name="taVarName" class="form-control" id="varName" aria-label="Enter variable name"
+    <input type="text" name="taVarName" class="form-control form-control-sm" id="varName" aria-label="Enter variable name"
       [(ngModel)]="currentVariable.name" placeholder="Enter variable name">
   </div>
 
   <div class="mb-3">
     <label for="varValue" class="form-label">Choose Variable data type</label>
-    <select name="chooseType" class="form-select" id="chooseType" aria-label="Choose data type"
+    <select name="chooseType" class="form-select form-select-sm" id="chooseType" aria-label="Choose data type"
       [(ngModel)]="currentVariable.type">
       <option *ngFor="let type of dataTypes" [value]="type">{{ type }}</option>
     </select>
@@ -39,7 +39,7 @@
 
   <div class="mb-3">
     <label for="varValue" class="form-label">Enter Variable value</label>
-    <input type="text" name="taVarValue" class="form-control" id="varValue" aria-label="Enter variable name"
+    <input type="text" name="taVarValue" class="form-control form-control-sm" id="varValue" aria-label="Enter variable name"
       [(ngModel)]="currentVariable.value" placeholder="Enter variable name">
   </div>
 
