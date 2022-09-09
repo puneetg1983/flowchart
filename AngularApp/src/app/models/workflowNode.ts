@@ -26,10 +26,10 @@ export class workflowNode {
   children: workflowNode[];
 }
 
-export interface stepVariable {
-  name: string;
-  type: string;
-  value: string;
+export class stepVariable {
+  name: string = '';
+  type: string = 'String';
+  value: string = '';
 }
 
 export class workflowNodeData {

@@ -1,0 +1,49 @@
+<table *ngIf="variables && variables.length > 0" class="table table-bordered table-responsive">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>DataType</th>
+      <th>Value</th>
+      <th colspan="2">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let v of variables; let idx = index">
+      <td>{{ v.name }}</td>
+      <td>{{ v.type }}</td>
+      <td>{{ v.value }}</td>
+      <td><a href="javascript:void(0)" (click)="edit(idx)">Edit</a></td>
+      <td><a href="javascript:void(0)" (click)="delete(idx)">Delete</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="mb-3">
+  <button class="btn btn-primary btn-sm" (click)="addNew()">Add new variable</button>
+</div>
+
+<form *ngIf="isEditing">
+  <div class="mb-3">
+    <label for="varName" class="form-label">Enter Variable name</label>
+    <input type="text" name="taVarName" class="form-control" id="varName" aria-label="Enter variable name"
+      [(ngModel)]="currentVariable.name" placeholder="Enter variable name">
+  </div>
+
+  <div class="mb-3">
+    <label for="varValue" class="form-label">Choose Variable data type</label>
+    <select name="chooseType" class="form-select" id="chooseType" aria-label="Choose data type"
+      [(ngModel)]="currentVariable.type">
+      <option *ngFor="let type of dataTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="varValue" class="form-label">Enter Variable value</label>
+    <input type="text" name="taVarValue" class="form-control" id="varValue" aria-label="Enter variable name"
+      [(ngModel)]="currentVariable.value" placeholder="Enter variable name">
+  </div>
+
+  <div class="mb-3">
+    <button class="btn btn-primary btn-sm" (click)="add()">Save variable</button>
+  </div>
+</form>

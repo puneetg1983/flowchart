@@ -14,23 +14,13 @@
       </form>
 
       <div class="mt-2 mb-2">
-        <button class="btn btn-primary" (click)="configureKustoQuery()">Configure
+        <button class="btn btn-primary btn-sm" (click)="configureKustoQuery()">Configure
           Kusto Query
         </button>
+        <button class="btn btn-primary btn-sm ms-2" (click)="configureVariables()">Configure
+          variables
+        </button>
       </div>
-
-      <table *ngIf="variables.length > 0" class="table table-bordered table-responsive">
-        <tr>
-          <th>Name</th>
-          <th>DataType</th>
-          <th>Value</th>
-        </tr>
-        <tr *ngFor="let v of variables">
-          <td>{{ v.name }}</td>
-          <td>{{ v.type }}</td>
-          <td>{{ v.value }}</td>
-        </tr>
-      </table>
 
       <app-node-actions (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
         (onDeleted)="deleteNode()" [isDisabled]="isDisabled()">

@@ -16,3 +16,12 @@ mat-dialog-content {
     margin-bottom: 5px;
     font-family: 'Courier New', Courier, monospace;
 }
+
+.table {
+    font-size: small;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.table td:hover {
+    border: 1px solid rgb(151, 173, 230);
+}

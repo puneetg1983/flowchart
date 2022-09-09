@@ -92,7 +92,7 @@ export class FlowHelperService {
     }
 
     getMaxIdForNode(nodeId: string, node: NgFlowchartStepComponent, num: number): number {
-        if (node.type === 'detector' || node.type === 'markdown' || node.type === 'kustoQuery') {
+        if (this.isActionNode(node)) {
             let nodeName: string = node.data.name;
             if (nodeName.startsWith(nodeId)) {
                 let intPart = nodeName.substring(nodeId.length);
@@ -256,6 +256,16 @@ export class FlowHelperService {
             sibling: true,
             index: switchCaseIndex
         });
+    }
+
+    isActionNode(node: NgFlowchartStepComponent<any>): boolean {
+        if (node.type === 'detector'
+            || node.type === 'markdown'
+            || node.type === 'kustoQuery') {
+            return true;
+        }
+
+        return false;
     }
 
 }

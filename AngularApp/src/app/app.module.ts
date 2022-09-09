@@ -33,6 +33,7 @@ import { DetectorNodeComponent } from './detector-node/detector-node.component';
 import { KustoNodeComponent } from './kusto-node/kusto-node.component';
 import { MarkdownNodeComponent } from './markdown-node/markdown-node.component';
 import { NodeActionsComponent } from './node-actions/node-actions.component';
+import { ConfigureVariablesComponent } from './configure-variables/configure-variables.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { NodeActionsComponent } from './node-actions/node-actions.component';
     DetectorNodeComponent,
     KustoNodeComponent,
     MarkdownNodeComponent,
-    NodeActionsComponent
+    NodeActionsComponent,
+    ConfigureVariablesComponent
   ],
   imports: [
     BrowserModule,
