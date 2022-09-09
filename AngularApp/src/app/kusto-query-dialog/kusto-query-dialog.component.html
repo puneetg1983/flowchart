@@ -19,8 +19,8 @@
                     [(ngModel)]="code">
                 </ngx-monaco-editor>
                 <div class="mt-2 mb-2">
-                    <button mat-raised-button color="primary" (click)="executeQuery()">Execute</button>
-                    <i *ngIf="isExecutingQuery" class="fa fa-gear fa-spin fa-2x"></i>
+                    <button class="btn btn-primary btn-sm" (click)="executeQuery()">Execute</button>
+                    <i *ngIf="isExecutingQuery" class="ms-2 fa fa-gear fa-spin fa-1x"></i>
                     <div *ngIf="error" class="error-details">
                         <i class="fa health-icon fa-times-circle unhealthy-icon-color" aria-hidden="true"></i>
                         <span> {{ error }}</span>

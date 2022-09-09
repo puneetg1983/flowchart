@@ -4,7 +4,8 @@ import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
 import { FlowHelperService } from 'src/services/FlowHelperService';
 import { ConfigureVariablesComponent } from '../configure-variables/configure-variables.component';
 import { KustoQueryDialogComponent } from '../kusto-query-dialog/kusto-query-dialog.component';
-import { stepVariable, workflowNodeData } from '../models/workflowNode';
+import { kustoQueryDialogParams } from '../models/kusto';
+import { promptType, stepVariable, workflowNodeData } from '../models/workflowNode';
 import { WorkflowNodeBaseClass } from '../node-base-class';
 
 @Component({
@@ -14,9 +15,10 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 })
 export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit {
 
-  defaultQueryText: string = "RoleInstanceHeartbeat\n| where TIMESTAMP > ago(1h)\n| take 5\n| project TIMESTAMP, Details, BuildVersion, OSVersion";
-
   @Input() data: workflowNodeData;
+
+  defaultQueryText: string = "RoleInstanceHeartbeat\n| where TIMESTAMP > ago(1h)\n| take 5\n| project TIMESTAMP, Details, BuildVersion, OSVersion";
+  promptTypes: string[] = [promptType.automatic, promptType.onClick];
 
   constructor(private _flowHelperServicePrivate: FlowHelperService, private matDialog: MatDialog) {
     super(_flowHelperServicePrivate);
@@ -27,17 +29,19 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
 
   configureKustoQuery() {
     const dialogConfig = this.getNewMatDialogConfig();
-    let dataInObject = this.data.queryText !== '' ? { queryText: this.data.queryText } : { queryText: this.defaultQueryText };
-    dialogConfig.data = dataInObject;
-    this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(modelData => {
-      if (modelData.queryText !== '') {
-        this.data.queryText = modelData.queryText;
-      }
+    let dialogParams: kustoQueryDialogParams = new kustoQueryDialogParams();
+    dialogParams.queryText = this.data.queryText !== '' ? this.data.queryText : this.defaultQueryText;
+    dialogParams.queryLabel = this.data.queryLabel;
+    dialogParams.variables = this.data.variables;
 
-      if (modelData.variables.length > 0) {
-        this.variables = this.variables.concat(modelData.variables);
+    dialogConfig.data = dialogParams;
+    this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(modelData => {
+      if (modelData != null) {
+        this.variables = modelData.variables;
+        this.data.queryLabel = modelData.queryLabel;
+        this.data.queryText = modelData.queryText;
+        this.data.variables = this.variables;
       }
-      this.data.variables = this.variables;
     });
   }
 

@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataTableResponseColumn, kustoQuery, KustoService } from 'src/services/KustoService';
+import { kustoQueryDialogParams } from '../models/kusto';
 import { stepVariable } from '../models/workflowNode';
 
 @Component({
@@ -8,6 +9,7 @@ import { stepVariable } from '../models/workflowNode';
   templateUrl: './kusto-query-dialog.component.html',
   styleUrls: ['./kusto-query-dialog.component.scss']
 })
+
 export class KustoQueryDialogComponent implements OnInit {
 
   // More editor options at https://github.com/Microsoft/vscode/issues/30795#issuecomment-410998882
@@ -18,11 +20,16 @@ export class KustoQueryDialogComponent implements OnInit {
   variables: stepVariable[] = [];
   isExecutingQuery: boolean = false;
   error: string = '';
-  kustoQueryLabel: string = 'YourKustoQueryLabel';
+  kustoQueryLabel: string = 'ThisStepKustoQueryLabel';
 
-  constructor(@Inject(MAT_DIALOG_DATA) data: { queryText: string }, public dialogRef: MatDialogRef<KustoQueryDialogComponent>,
+  constructor(@Inject(MAT_DIALOG_DATA) data: kustoQueryDialogParams, public dialogRef: MatDialogRef<KustoQueryDialogComponent>,
     private _kustoService: KustoService) {
     this.code = decodeURI(data.queryText);
+    if (data.queryLabel) {
+      this.kustoQueryLabel = data.queryLabel;
+    }
+
+    this.variables = data.variables;
   }
 
   ngOnInit(): void {
@@ -33,7 +40,13 @@ export class KustoQueryDialogComponent implements OnInit {
   }
 
   save() {
-    this.dialogRef.close({ queryText: encodeURI(this.code), variables: this.variables });
+    let dialogResult: kustoQueryDialogParams = {
+      queryText: encodeURI(this.code),
+      variables: this.variables,
+      queryLabel: this.kustoQueryLabel
+    };
+
+    this.dialogRef.close(dialogResult);
   }
 
   executeQuery() {

@@ -12,8 +12,8 @@ export enum nodeType {
 }
 
 export enum promptType {
-  automatic,
-  onClick
+  automatic = 'automatic',
+  onClick = 'onClick'
 }
 
 export class workflow {
@@ -41,6 +41,7 @@ export class workflowNodeData {
   isEditing: boolean = false;
   isEditingTitle: boolean = false;
   queryText: string = '';
+  queryLabel: string = '';
   variables: stepVariable[] = [];
   markdownText: string = '';
   completionOptions: string[] = [];
