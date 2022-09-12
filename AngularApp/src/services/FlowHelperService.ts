@@ -8,7 +8,7 @@ import { DetectorNodeComponent } from "src/app/detector-node/detector-node.compo
 import { KustoNodeComponent } from "src/app/kusto-node/kusto-node.component";
 import { MarkdownNodeComponent } from "src/app/markdown-node/markdown-node.component";
 import { nodeType, workflowNode, workflowNodeData } from "src/app/models/workflowNode";
-import { newNodeModel } from "src/app/node-actions/node-actions.component";
+import { newNodeProperties } from "src/app/node-actions/node-actions.component";
 import { SwitchCaseDefaultStepComponent } from "src/app/switch-case-default-step/switch-case-default-step.component";
 import { SwitchCaseStepComponent } from "src/app/switch-case-step/switch-case-step.component";
 import { SwitchStepComponent } from "src/app/switch-step/switch-step.component";
@@ -33,7 +33,14 @@ export class FlowHelperService {
         node.destroy(true);
     }
 
-    addNode(node: NgFlowchartStepComponent<any>, newNode: newNodeModel) {
+    addChildNode(node: NgFlowchartStepComponent<any>, nodeType: nodeType) {
+        let newNode: newNodeProperties = new newNodeProperties();
+        newNode.isParallel = false;
+        newNode.nodeType = nodeType;
+        this.addNode(node, newNode);
+    }
+
+    addNode(node: NgFlowchartStepComponent<any>, newNode: newNodeProperties) {
         let currentNode = newNode.isParallel ? node.parent : node;
         switch (newNode.nodeType) {
             case nodeType.detector:
