@@ -271,11 +271,12 @@ export class FlowHelperService {
     getVariableCompletionOptions(node: NgFlowchartStepComponent<any>): stepVariable[] {
         let allVariables : stepVariable[] = [];
         let currentNode = node;
-        while (currentNode != null && this.isActionNode(node)) {
-            allVariables = allVariables.concat(currentNode.data.variables);
+        while (currentNode != null) {
+            if (this.isActionNode(currentNode)){
+                allVariables = allVariables.concat(currentNode.data.variables);
+            }
             currentNode = currentNode.parent;
         }
-
         return allVariables;
     }
 
