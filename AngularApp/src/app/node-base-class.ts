@@ -3,6 +3,15 @@ import { NgFlowchartStepComponent } from "@joelwenzel/ng-flowchart";
 import { FlowHelperService } from "src/services/FlowHelperService";
 import { nodeType, stepVariable, workflowNodeData } from "./models/workflowNode";
 import { newNodeProperties } from "./node-actions/node-actions.component";
+import Swal from 'sweetalert2'
+
+const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-danger',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: false
+  })
 
 export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
     constructor(private _flowHelperService: FlowHelperService) {
@@ -33,6 +42,11 @@ export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
     }
 
     addCondition(conditionType: string) {
+        if (this._flowHelperService.getVariableCompletionOptions(this).length === 0) {
+            swalWithBootstrapButtons.fire("Error", "You cannot add any conditions because you have not added any variables yet. Please add some variables first and then add conditions.", 'error');
+            return;
+        }
+
         switch (conditionType) {
             case 'switch':
                 this._flowHelperService.addSwitchCondition(this);
@@ -47,6 +61,11 @@ export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
     }
 
     addSwitchCase() {
+        if (this._flowHelperService.getVariableCompletionOptions(this).length === 0) {
+            swalWithBootstrapButtons.fire("Error", "You cannot add any conditions because you have not added any variables yet. Please add some variables first and then add conditions.", 'error');
+            return;
+        }
+
         this._flowHelperService.addSwitchCase(this);
     }
 }
