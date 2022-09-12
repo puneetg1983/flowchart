@@ -48,4 +48,8 @@ export class workflowNodeData {
   promptType: promptType = promptType.automatic;
   status: nodeStatus = nodeStatus.info;
   conditionValue: string;
+  ifconditionLeftValue: string;
+  ifconditionRightValue: string;
+  switchOnValue: string;
+  switchCaseValue: string;
 }

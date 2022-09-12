@@ -241,11 +241,11 @@ export class FlowHelperService {
     addSwitchCase(node: NgFlowchartStepComponent<any>) {
         let swithCaseNode = new workflowNode();
         swithCaseNode.type = "switchCase";
-        let completionOptions: string[] = [];
         let switchCondtionNode = node.parent;
 
         let switchCaseDataNode = new workflowNodeData();
         switchCaseDataNode.name = "switchCase";
+        switchCaseDataNode.completionOptions = this.getVariableCompletionOptions(node);
 
         let switchCaseIndex = switchCondtionNode.children.length - 2;
         switchCondtionNode.addChild({

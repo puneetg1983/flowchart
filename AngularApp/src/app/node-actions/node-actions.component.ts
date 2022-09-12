@@ -18,9 +18,11 @@ export class NodeActionsComponent implements OnInit {
   @Input() isConditionNode: boolean = false;
   @Input() isDisabled: boolean = false;
   @Input() isRootNode: boolean = false;
+  @Input() isSwitchCase: boolean = false;
 
   @Output() onNodeAdded = new EventEmitter<newNodeProperties>();
   @Output() onConditionAdded = new EventEmitter<string>();
+  @Output() onSwitchCaseAdded = new EventEmitter<boolean>();
   @Output() onDeleted = new EventEmitter<boolean>();
 
   nodeType = nodeType;
@@ -39,6 +41,10 @@ export class NodeActionsComponent implements OnInit {
 
   addCondition(conditionType: string) {
     this.onConditionAdded.emit(conditionType);
+  }
+
+  addSwitchCase() {
+    this.onSwitchCaseAdded.emit(true);
   }
 
   deleteNode() {

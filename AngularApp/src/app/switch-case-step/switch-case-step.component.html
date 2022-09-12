@@ -1,15 +1,9 @@
-<div class="card" [attr.name]="data.name" #card #canvasContent>
-  <mat-card>
-    <mat-card-content>
-      <mat-card-title>Case equals</mat-card-title>
-      <ng2-completer [(ngModel)]="data.conditionValue" [datasource]="data.completionOptions" [minSearchLength]="0"
-        placeholder="Choose a value">
-      </ng2-completer>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="addChildNode(nodeType.detector)" [disabled]="isDisabled()" mat-button>Add
-          Detector</button>
-        <button mat-raised-button color="primary" (click)="addSwitchCase()" mat-button>Add Switch case</button>
-      </mat-card-actions>
-    </mat-card-content>
-  </mat-card>
+<div class="card case-node" [attr.name]="data.name" #card #canvasContent>
+  <div class="card-body">
+    <div class="card-title">Case equals</div>
+    <app-variable-picker propertyName="switchCaseValue" [data]="data"></app-variable-picker>
+    <app-node-actions [isConditionNode]="true" [isSwitchCase]="true" (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
+      (onDeleted)="deleteNode()" [isDisabled]="isDisabled()" [isRootNode]="isRootNode()" (onSwitchCaseAdded)="addSwitchCase()">
+    </app-node-actions>
+  </div>
 </div>

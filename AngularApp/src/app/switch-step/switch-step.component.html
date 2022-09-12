@@ -1,13 +1,7 @@
 <div class="card" [attr.name]="data.name" #card #canvasContent>
-  <mat-card>
-    <mat-card-content>
-      <mat-card-title>Switch ON</mat-card-title>
-      <ng2-completer [(ngModel)]="data.conditionValue" [datasource]="data.completionOptions" [minSearchLength]="0"
-        placeholder="Choose a value">
-      </ng2-completer>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="warn" (click)="deleteNode()" mat-button>Delete</button>
-    </mat-card-actions>
-  </mat-card>
+  <div class="card-body">
+    <div class="card-title">Switch ON</div>
+    <app-variable-picker propertyName="switchOnValue" [data]="data"></app-variable-picker>
+    <button type="button" class="btn btn-danger btn-sm" (click)="deleteNode()" mat-button>Delete</button>
+  </div>
 </div>

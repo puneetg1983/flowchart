@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
 import { FlowHelperService } from 'src/services/FlowHelperService';
 import { WorkflowNodeBaseClass } from '../node-base-class';
 

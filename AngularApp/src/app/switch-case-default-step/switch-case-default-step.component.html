@@ -1,12 +1,10 @@
-<div class="card" [attr.name]="data.name" #card #canvasContent>
-    <mat-card>
-        <mat-card-content>
-            <mat-card-title>Default</mat-card-title>
-            <div>If no case contains a matching value</div>
-        </mat-card-content>
-        <mat-card-actions>
-            <button mat-raised-button color="primary" (click)="addChildNode(nodeType.detector)" [disabled]="isDisabled()" mat-button>Add
-                Detector</button>
-        </mat-card-actions>
-    </mat-card>
+<div class="card case-node" [attr.name]="data.name" #card #canvasContent>
+    <div class="card-body">
+        <div class="card-title">Default</div>
+        <div>If no case contains a matching value</div>
+        <app-node-actions [isConditionNode]="true" (onNodeAdded)="addNode($event)"
+            (onConditionAdded)="addCondition($event)" (onDeleted)="deleteNode()" [isDisabled]="isDisabled()"
+            [isRootNode]="isRootNode()">
+        </app-node-actions>
+    </div>
 </div>
