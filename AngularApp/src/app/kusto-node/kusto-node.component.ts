@@ -41,6 +41,7 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
         this.data.queryLabel = modelData.queryLabel;
         this.data.queryText = modelData.queryText;
         this.data.variables = this.variables;
+        this.data.completionOptions = this._flowHelperServicePrivate.getVariableCompletionOptions(this);
       }
     });
   }

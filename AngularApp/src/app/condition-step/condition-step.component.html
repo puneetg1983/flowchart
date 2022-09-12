@@ -1,29 +1,39 @@
 <div class="condition choose" [attr.name]="data.name" #card #canvasContent>
-
-    <div class="row">
-      <div class="col-10">
-        <strong>Specify condition</strong>
-      </div>
-      <div class="col"><a href="javascript:void(0)" (click)="deleteNode()">Delete</a></div>
+  <div class="row">
+    <div class="col-10">
+      <strong>Specify condition</strong>
     </div>
-    <div class="row mt-2">
-      <div class="col">
-        <ng2-completer [datasource]="data.completionOptions" [minSearchLength]="0" placeholder="Choose a value"
-          [inputClass]="'completer-style'"></ng2-completer>
-      </div>
-      <div class="col"> <select style="float: left;" class="ms-1">
-          <option>eq</option>
-          <option>ne</option>
-          <option>gt</option>
-          <option>lt</option>
-          <option>gte</option>
-          <option>lte</option>
-        </select> </div>
-      <div class="col">
-        <ng2-completer [(ngModel)]="data.conditionValue" [datasource]="data.completionOptions"
-          [minSearchLength]="0" placeholder="Choose a value">
-        </ng2-completer>
-      </div>
-    </div>
-
+    <div class="col"><a href="javascript:void(0)" (click)="deleteNode()">Delete</a></div>
   </div>
+  <div class="row mt-2">
+    <div class="col">
+      <form class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Variable</mat-label>
+          <input type="text" placeholder="Choose a variable" aria-label="Number" matInput [formControl]="myControl"
+            [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </form>
+
+    </div>
+    <div class="col"> <select style="float: left;" class="ms-1">
+        <option>eq</option>
+        <option>ne</option>
+        <option>gt</option>
+        <option>lt</option>
+        <option>gte</option>
+        <option>lte</option>
+      </select> </div>
+    <div class="col">
+      <ng2-completer [(ngModel)]="data.conditionValue" [datasource]="data.completionOptions" [minSearchLength]="0"
+        placeholder="Choose a value">
+      </ng2-completer>
+    </div>
+  </div>
+
+</div>

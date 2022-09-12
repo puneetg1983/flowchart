@@ -7,7 +7,7 @@ import { ConditionStepComponent } from "src/app/condition-step/condition-step.co
 import { DetectorNodeComponent } from "src/app/detector-node/detector-node.component";
 import { KustoNodeComponent } from "src/app/kusto-node/kusto-node.component";
 import { MarkdownNodeComponent } from "src/app/markdown-node/markdown-node.component";
-import { nodeType, workflowNode, workflowNodeData } from "src/app/models/workflowNode";
+import { nodeType, stepVariable, workflowNode, workflowNodeData } from "src/app/models/workflowNode";
 import { newNodeProperties } from "src/app/node-actions/node-actions.component";
 import { SwitchCaseDefaultStepComponent } from "src/app/switch-case-default-step/switch-case-default-step.component";
 import { SwitchCaseStepComponent } from "src/app/switch-case-step/switch-case-step.component";
@@ -137,22 +137,6 @@ export class FlowHelperService {
         }
     }
 
-    getAutoCompletions(currentNode: NgFlowchartStepComponent<any>): string[] {
-        let completions = [];
-        if (currentNode == null) {
-            return completions;
-        }
-        while (currentNode != null) {
-            if (currentNode.data.name && currentNode.type == 'detector') {
-                completions.push(currentNode.data.name + ".rows[0]['Column1']");
-            }
-            currentNode = currentNode.parent;
-        }
-
-        console.log("Completions = " + completions.length);
-        return completions;
-    }
-
     addCondition(node: NgFlowchartStepComponent<any>) {
         let wfNode = new workflowNode();
         let wfIfTrueNode = new workflowNode();
@@ -173,7 +157,7 @@ export class FlowHelperService {
         elseDataNode.name = "iffalse";
         dataNode.name = "some-condition";
 
-        dataNode.completionOptions = this.getAutoCompletions(node);
+        dataNode.completionOptions = this.getVariableCompletionOptions(node);
 
         let condtionNode = node.addChild({
             template: ConditionStepComponent,
@@ -221,7 +205,7 @@ export class FlowHelperService {
         let switchCaseDefaultDataNode = new workflowNodeData();
         switchCaseDefaultDataNode.name = "switchCaseDefault";
 
-        let completionOptions = this.getAutoCompletions(node);
+        let completionOptions = this.getVariableCompletionOptions(node);
         dataNode.name = "switch-condition";
         dataNode.completionOptions = completionOptions;
         switchCaseDataNode.completionOptions = completionOptions;;
@@ -282,6 +266,17 @@ export class FlowHelperService {
         }
 
         return false;
+    }
+
+    getVariableCompletionOptions(node: NgFlowchartStepComponent<any>): stepVariable[] {
+        let allVariables : stepVariable[] = [];
+        let currentNode = node;
+        while (currentNode != null && this.isActionNode(node)) {
+            allVariables = allVariables.concat(currentNode.data.variables);
+            currentNode = currentNode.parent;
+        }
+
+        return allVariables;
     }
 
 }

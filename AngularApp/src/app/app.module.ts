@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgFlowchartModule } from '@joelwenzel/ng-flowchart';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2CompleterModule } from "ng2-completer";
 import { ConditionStepComponent } from './condition-step/condition-step.component';
 import { ConditionIftrueStepComponent } from './condition-iftrue-step/condition-iftrue-step.component';
@@ -28,7 +28,6 @@ import { AngularMarkdownEditorModule } from 'angular-markdown-editor';
 import { MarkdownModule } from 'ngx-markdown';
 import { KustoService } from 'src/services/KustoService';
 import { MatTableModule } from '@angular/material/table';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DetectorNodeComponent } from './detector-node/detector-node.component';
 import { KustoNodeComponent } from './kusto-node/kusto-node.component';
 import { MarkdownNodeComponent } from './markdown-node/markdown-node.component';
@@ -37,6 +36,9 @@ import { ConfigureVariablesComponent } from './configure-variables/configure-var
 import { CommonNodePropertiesComponent } from './common-node-properties/common-node-properties.component';
 import { NodeTitleComponent } from './node-title/node-title.component';
 import { ErrorMessageComponent } from './error-message/error-message.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -63,8 +65,11 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
     HttpClientModule,
     NgFlowchartModule,
     FormsModule,
+    ReactiveFormsModule,
     Ng2CompleterModule,
     BrowserAnimationsModule,
+    MatFormFieldModule,
+    MatInputModule,
     MatDialogModule,
     MatButtonModule,
     MatExpansionModule,
@@ -74,7 +79,7 @@ import { ErrorMessageComponent } from './error-message/error-message.component';
     MatMenuModule,
     MatButtonToggleModule,
     MatTableModule,
-    MatProgressSpinnerModule,
+    MatAutocompleteModule,
     AngularMarkdownEditorModule.forRoot({
       // add any Global Options/Config you might want
       // to avoid passing the same options over and over in each components of your App

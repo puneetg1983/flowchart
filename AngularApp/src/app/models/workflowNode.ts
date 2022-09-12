@@ -44,7 +44,7 @@ export class workflowNodeData {
   queryLabel: string = '';
   variables: stepVariable[] = [];
   markdownText: string = '';
-  completionOptions: string[] = [];
+  completionOptions: stepVariable[] = [];
   promptType: promptType = promptType.automatic;
   status: nodeStatus = nodeStatus.info;
   conditionValue: string;
