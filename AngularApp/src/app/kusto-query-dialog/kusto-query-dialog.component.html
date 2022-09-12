@@ -6,8 +6,8 @@
                 <label for="idQueryLabel" class="form-label">Enter label for the Kusto Query</label>
             </div>
             <div class="col-10">
-                <input class="form-control form-control-sm" [(ngModel)]="kustoQueryLabel" name="queryLabel" id="idQueryLabel"
-                    placeholder="Enter label for the Kusto Query">
+                <input class="form-control form-control-sm" [(ngModel)]="kustoQueryLabel" name="queryLabel"
+                    id="idQueryLabel" placeholder="Enter label for the Kusto Query">
             </div>
         </div>
         <div class="row">
@@ -21,9 +21,8 @@
                 <div class="mt-2 mb-2">
                     <button class="btn btn-primary btn-sm" (click)="executeQuery()">Execute</button>
                     <i *ngIf="isExecutingQuery" class="ms-2 fa fa-gear fa-spin fa-1x"></i>
-                    <div *ngIf="error" class="error-details">
-                        <i class="fa health-icon fa-times-circle unhealthy-icon-color" aria-hidden="true"></i>
-                        <span> {{ error }}</span>
+                    <div *ngIf="error">
+                        <app-error-message [error]="error"></app-error-message>
                     </div>
                 </div>
             </div>

@@ -16,7 +16,7 @@
             </form>
             <app-common-node-properties [data]="data"></app-common-node-properties>
             <app-node-actions (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
-                (onDeleted)="deleteNode()" [isDisabled]="isDisabled()">
+                (onDeleted)="deleteNode()" [isDisabled]="isDisabled()" [isRootNode]="isRootNode()">
             </app-node-actions>
         </div>
     </div>

@@ -5,14 +5,9 @@
         </div>
         <h6 class="card-subtitle mb-2 text-muted">{{ data.name }}</h6>
         <div class="card-text">
-            <div class="mt-2 mb-2 markdown-editor">
-                <angular-markdown-editor [textareaId]="uniqueId" rows="5" name="markdownText" [options]="editorOptions"
-                    [(ngModel)]="data.markdownText">
-                </angular-markdown-editor>
-            </div>
             <app-common-node-properties [data]="data"></app-common-node-properties>
             <app-node-actions (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
-                (onDeleted)="deleteNode()" [isDisabled]="isDisabled()">
+                (onDeleted)="deleteNode()" [isDisabled]="isDisabled()" [isRootNode]="isRootNode()">
             </app-node-actions>
         </div>
     </div>

@@ -2,6 +2,7 @@ import { Input } from "@angular/core";
 import { NgFlowchartStepComponent } from "@joelwenzel/ng-flowchart";
 import { FlowHelperService } from "src/services/FlowHelperService";
 import { nodeType, stepVariable, workflowNodeData } from "./models/workflowNode";
+import { newNodeModel } from "./node-actions/node-actions.component";
 
 export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
     constructor(private _flowHelperService: FlowHelperService) {
@@ -19,8 +20,12 @@ export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
         return this._flowHelperService.isDisabled(this);
     }
 
-    addNode(nodeType: nodeType) {
-        this._flowHelperService.addNode(this, nodeType);
+    isRootNode(){
+        return this._flowHelperService.isRootNode(this);
+    }
+
+    addNode(newNodeModel: newNodeModel) {
+        this._flowHelperService.addNode(this, newNodeModel);
     }
 
     addCondition(conditionType: string) {

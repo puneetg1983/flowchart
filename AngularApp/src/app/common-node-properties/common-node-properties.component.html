@@ -1,23 +1,31 @@
 <form>
+
+  <div class="mb-3">
+    <div class="markdown-editor">
+      <angular-markdown-editor [textareaId]="uniqueId" rows="4" name="markdownText" [options]="editorOptions"
+        [(ngModel)]="data.markdownText">
+      </angular-markdown-editor>
+    </div>
+  </div>
   <div class="mb-3">
     <label for="provideDescription" class="form-label">Enter description</label>
-    <textarea rows="3" name="provideDescription" class="form-control form-control-sm" id="provideDescription"
+    <textarea rows="2" name="provideDescription" class="form-control form-control-sm" id="provideDescription"
       aria-label="Enter description" [(ngModel)]="data.description"
       placeholder="Enter some description for this node"></textarea>
   </div>
 
   <div class="mb-3">
     <label for="choosePromptType" class="form-label">Choose Prompt type</label>
-    <select name="choosePromptType" class="form-select form-select-sm" id="choosePromptType" aria-label="Choose prompt type"
-      [(ngModel)]="data.promptType">
+    <select name="choosePromptType" class="form-select form-select-sm" id="choosePromptType"
+      aria-label="Choose prompt type" [(ngModel)]="data.promptType">
       <option *ngFor="let type of promptTypes" [value]="type">{{ type }}</option>
     </select>
   </div>
 
   <div class="mb-3">
     <label for="chooseNodeStatus" class="form-label">Choose Status</label>
-    <select name="chooseNodeStatus" class="form-select form-select-sm" id="chooseNodeStatus" aria-label="Choose step status"
-      [(ngModel)]="data.status">
+    <select name="chooseNodeStatus" class="form-select form-select-sm" id="chooseNodeStatus"
+      aria-label="Choose step status" [(ngModel)]="data.status">
       <option *ngFor="let status of nodeStatuses" [value]="status">{{ status }}</option>
     </select>
   </div>

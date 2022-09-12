@@ -8,6 +8,7 @@ import { DetectorNodeComponent } from "src/app/detector-node/detector-node.compo
 import { KustoNodeComponent } from "src/app/kusto-node/kusto-node.component";
 import { MarkdownNodeComponent } from "src/app/markdown-node/markdown-node.component";
 import { nodeType, workflowNode, workflowNodeData } from "src/app/models/workflowNode";
+import { newNodeModel } from "src/app/node-actions/node-actions.component";
 import { SwitchCaseDefaultStepComponent } from "src/app/switch-case-default-step/switch-case-default-step.component";
 import { SwitchCaseStepComponent } from "src/app/switch-case-step/switch-case-step.component";
 import { SwitchStepComponent } from "src/app/switch-step/switch-step.component";
@@ -21,16 +22,23 @@ export class FlowHelperService {
         return node.children.length > 0;
     }
 
+    isRootNode(node: NgFlowchartStepComponent<any>): boolean {
+        if (node.parent) {
+            return false;
+        }
+        return true;
+    }
+
     onDelete(node: NgFlowchartStepComponent<any>) {
         node.destroy(true);
     }
 
-    addNode(node: NgFlowchartStepComponent<any>, inputNodeType: nodeType) {
-
-        switch (inputNodeType) {
+    addNode(node: NgFlowchartStepComponent<any>, newNode: newNodeModel) {
+        let currentNode = newNode.isParallel ? node.parent : node;
+        switch (newNode.nodeType) {
             case nodeType.detector:
-                let dataNodeDetector = this.getNewDetectorNode(node, this.detectors[0]);
-                node.addChild({
+                let dataNodeDetector = this.getNewDetectorNode(currentNode, this.detectors[0]);
+                currentNode.addChild({
                     template: DetectorNodeComponent,
                     type: 'detector',
                     data: dataNodeDetector
@@ -40,8 +48,8 @@ export class FlowHelperService {
                 break;
 
             case nodeType.kustoQuery:
-                let dataNodeKustoQuery = this.getNewNode(node, 'kustoQuery');
-                node.addChild({
+                let dataNodeKustoQuery = this.getNewNode(currentNode, 'kustoQuery');
+                currentNode.addChild({
                     template: KustoNodeComponent,
                     type: 'kustoQuery',
                     data: dataNodeKustoQuery
@@ -51,8 +59,8 @@ export class FlowHelperService {
                 break;
 
             case nodeType.markdown:
-                let dataNodeMarkdown = this.getNewNode(node, 'markdown');
-                node.addChild({
+                let dataNodeMarkdown = this.getNewNode(currentNode, 'markdown');
+                currentNode.addChild({
                     template: MarkdownNodeComponent,
                     type: 'markdown',
                     data: dataNodeMarkdown

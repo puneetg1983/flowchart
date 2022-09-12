@@ -12,7 +12,8 @@
     </div>
     <div class="ms-2 mt-4">
         <app-node-actions [isConditionNode]="true" (onNodeAdded)="addNode($event)"
-            (onConditionAdded)="addCondition($event)" (onDeleted)="deleteNode()" [isDisabled]="isDisabled()">
+            (onConditionAdded)="addCondition($event)" (onDeleted)="deleteNode()" [isDisabled]="isDisabled()"
+            [isRootNode]="isRootNode()">
         </app-node-actions>
     </div>
 </div>

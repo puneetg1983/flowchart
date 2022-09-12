@@ -3,6 +3,11 @@ import { NgFlowchartStepComponent } from '@joelwenzel/ng-flowchart';
 import { FlowHelperService } from 'src/services/FlowHelperService';
 import { nodeType, workflowNodeData } from '../models/workflowNode';
 
+export class newNodeModel {
+  nodeType: nodeType;
+  isParallel: boolean;
+}
+
 @Component({
   selector: 'app-node-actions',
   templateUrl: './node-actions.component.html',
@@ -12,8 +17,9 @@ export class NodeActionsComponent implements OnInit {
 
   @Input() isConditionNode: boolean = false;
   @Input() isDisabled: boolean = false;
+  @Input() isRootNode: boolean = false;
 
-  @Output() onNodeAdded = new EventEmitter<nodeType>();
+  @Output() onNodeAdded = new EventEmitter<newNodeModel>();
   @Output() onConditionAdded = new EventEmitter<string>();
   @Output() onDeleted = new EventEmitter<boolean>();
 
@@ -24,8 +30,11 @@ export class NodeActionsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  addNode(inputNodeType: nodeType) {
-    this.onNodeAdded.emit(inputNodeType);
+  addNode(inputNodeType: nodeType, isParallel: boolean) {
+    let newNode = new newNodeModel();
+    newNode.isParallel = isParallel;
+    newNode.nodeType = inputNodeType;
+    this.onNodeAdded.emit(newNode);
   }
 
   addCondition(conditionType: string) {

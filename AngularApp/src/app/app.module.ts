@@ -36,6 +36,7 @@ import { NodeActionsComponent } from './node-actions/node-actions.component';
 import { ConfigureVariablesComponent } from './configure-variables/configure-variables.component';
 import { CommonNodePropertiesComponent } from './common-node-properties/common-node-properties.component';
 import { NodeTitleComponent } from './node-title/node-title.component';
+import { ErrorMessageComponent } from './error-message/error-message.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { NodeTitleComponent } from './node-title/node-title.component';
     NodeActionsComponent,
     ConfigureVariablesComponent,
     CommonNodePropertiesComponent,
-    NodeTitleComponent
+    NodeTitleComponent,
+    ErrorMessageComponent
   ],
   imports: [
     BrowserModule,

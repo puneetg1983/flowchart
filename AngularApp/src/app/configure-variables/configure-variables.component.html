@@ -25,8 +25,10 @@
 <form *ngIf="isEditing">
   <div class="mb-3">
     <label for="varName" class="form-label">Enter Variable name</label>
-    <input type="text" name="taVarName" class="form-control form-control-sm" id="varName" aria-label="Enter variable name"
-      [(ngModel)]="currentVariable.name" placeholder="Enter variable name">
+    <input type="text" name="taVarName" class="form-control form-control-sm" id="varName"
+      aria-label="Enter variable name" [(ngModel)]="currentVariable.name" placeholder="Enter variable name">
+    <div id="variableHelp" class="form-text">Create custom variables that can be used either in current step or child
+      steps</div>
   </div>
 
   <div class="mb-3">
@@ -39,8 +41,11 @@
 
   <div class="mb-3">
     <label for="varValue" class="form-label">Enter Variable value</label>
-    <input type="text" name="taVarValue" class="form-control form-control-sm" id="varValue" aria-label="Enter variable name"
-      [(ngModel)]="currentVariable.value" placeholder="Enter variable name">
+    <input type="text" name="varValue" class="form-control form-control-sm" id="varValue" (keyup)="onVariableChange($event)"
+      aria-label="Enter variable name" [(ngModel)]="currentVariable.value" placeholder="Enter variable name">
+    <div *ngIf="variableHasError">
+      <app-error-message [error]="errorMessage"></app-error-message>
+    </div>
   </div>
 
   <div class="mb-3">
