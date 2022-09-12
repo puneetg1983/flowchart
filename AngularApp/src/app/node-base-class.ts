@@ -20,12 +20,16 @@ export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
         return this._flowHelperService.isDisabled(this);
     }
 
-    isRootNode(){
+    isRootNode() {
         return this._flowHelperService.isRootNode(this);
     }
 
     addNode(newNodeProperties: newNodeProperties) {
         this._flowHelperService.addNode(this, newNodeProperties);
+    }
+
+    addChildNode(nodeType: nodeType) {
+        this._flowHelperService.addChildNode(this, nodeType);
     }
 
     addCondition(conditionType: string) {
