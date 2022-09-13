@@ -30,7 +30,7 @@ export class AppComponent {
   @ViewChild(NgFlowchartCanvasDirective)
   canvas: NgFlowchartCanvasDirective;
 
-  disabled = false;
+  disabled = true;
   detectors: string[] = ['httpservererrors', 'http500', 'http502', 'http503', 'frontendcheck', 'datarolecheck', 'workercheck'];
   nodeType = nodeType;
 

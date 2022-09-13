@@ -2,56 +2,12 @@
     box-sizing: border-box;
 }
 
-body {
-    font-family: sans-serif;
-}
-
-main {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-}
-
 #canvas {
-    height: calc(100% - 50px);
+    height: calc(100%);
+    width: calc(100%);
     background: #f0f0f0;
     flex: 1;
-    margin: 50px 0 0 50px;
-    background-size: 30px 30px;
-    background-image: linear-gradient(to right, #d9d9d9 1px, transparent 1px),
-        linear-gradient(to bottom, #d9d9d9 1px, transparent 1px);
-}
-
-#palette {
-    width: 300px;
-    padding: 16px;
-}
-
-#palette .plugin-op {
-    padding: 12px;
-    user-select: none;
-    display: block;
-}
-
-#palette .plugin-op:hover {
-    background: rgba(0, 0, 0, 0.04);
-}
-
-section {
-    padding: 1em;
-    border-bottom: 1px solid lightgrey;
-}
-
-section .wide {
-    width: 100%;
-}
-
-.sub-section {
-    padding: 0.5em 0;
-}
-
-select {
-    padding: 0.3em;
+    border: 1px solid darkgray;
 }
 
 .condition {
@@ -87,20 +43,10 @@ select {
     display: inline-block;
 }
 
-.completer-style  {
-    width: 270px;
-    height: 40px;
-}
-
 div#canvas[disabled="true"] {
-    opacity: .7;
+    opacity: 1;
 }
 
 div#canvas[disabled="true"] ::ng-deep.ngflowchart-step-wrapper {
-    opacity: .7;
+    opacity: 1;
 }
-
-::ng-deep .completer-input{
-    width: 270px;
-    height: 40px;
-} 

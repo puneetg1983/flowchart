@@ -5,7 +5,6 @@ import { AppComponent } from './app.component';
 import { NgFlowchartModule } from '@joelwenzel/ng-flowchart';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Ng2CompleterModule } from "ng2-completer";
 import { ConditionStepComponent } from './condition-step/condition-step.component';
 import { ConditionIftrueStepComponent } from './condition-iftrue-step/condition-iftrue-step.component';
 import { ConditionIffalseStepComponent } from './condition-iffalse-step/condition-iffalse-step.component';
@@ -68,7 +67,6 @@ import { VariablePickerComponent } from './variable-picker/variable-picker.compo
     NgFlowchartModule,
     FormsModule,
     ReactiveFormsModule,
-    Ng2CompleterModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
     MatInputModule,
