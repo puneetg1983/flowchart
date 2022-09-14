@@ -13,14 +13,35 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 })
 export class MarkdownNodeComponent extends WorkflowNodeBaseClass implements OnInit {
 
+  defaultMarkdownText: string = "**Sample Text** to be used as markdown. Use any custom `variables` defined in variables section as {YourVariableName}";
+  editorOptions: EditorOption;
+  bsEditorInstance: EditorInstance;
+  uniqueId: string;
+
   @Input() data: workflowNodeData;
 
-
-  constructor(private _flowHelperServicePrivate: FlowHelperService) {
+  constructor(private _flowHelperServicePrivate: FlowHelperService, private _markdownService: MarkdownService) {
     super(_flowHelperServicePrivate);
+    this.uniqueId = Date.now().toString();
   }
 
   ngOnInit(): void {
+    this.editorOptions = {
+      autofocus: false,
+      iconlibrary: 'fa',
+      savable: false,
+      onShow: (e) => this.bsEditorInstance = e,
+      parser: (val) => this.parse(val)
+    };
+
+    if (this.data.markdownText === '') {
+      this.data.markdownText = this.defaultMarkdownText;
+    }
+  }
+
+  parse(inputValue: string) {
+    const markedOutput = this._markdownService.compile(inputValue.trim());
+    return markedOutput;
   }
 
 }

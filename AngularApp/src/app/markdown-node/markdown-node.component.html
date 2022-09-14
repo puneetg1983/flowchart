@@ -1,11 +1,17 @@
 <div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
     <div class="card-body">
         <div class="card-title card-title-markdown">
-            <app-node-title [data]="data" [customClass]="'background-green'" [customClassIcon]="'bi-markdown'"></app-node-title>
+            <app-node-title [data]="data" [customClass]="'background-green'" [customClassIcon]="'bi-markdown'">
+            </app-node-title>
         </div>
         <h6 class="card-subtitle mb-2 text-muted">{{ data.name }}</h6>
         <div class="card-text">
-            <app-common-node-properties [data]="data"></app-common-node-properties>
+            <div class="markdown-editor">
+                <angular-markdown-editor [textareaId]="uniqueId" rows="4" name="markdownText" [options]="editorOptions"
+                    [(ngModel)]="data.markdownText">
+                </angular-markdown-editor>
+            </div>
+            <app-common-node-properties [showMarkdown]="false" [data]="data"></app-common-node-properties>
             <app-node-actions (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
                 (onDeleted)="deleteNode()" [isDisabled]="isDisabled()" [isRootNode]="isRootNode()">
             </app-node-actions>

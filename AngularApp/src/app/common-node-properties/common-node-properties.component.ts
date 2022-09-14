@@ -17,9 +17,10 @@ export class CommonNodePropertiesComponent implements OnInit {
   editorOptions: EditorOption;
   bsEditorInstance: EditorInstance;
 
-
+  @Input() showMarkdown: boolean = true;
   @Input() data: any;
-  constructor(private _markdownService: MarkdownService ) {
+
+  constructor(private _markdownService: MarkdownService) {
     this.uniqueId = Date.now().toString();
   }
 
