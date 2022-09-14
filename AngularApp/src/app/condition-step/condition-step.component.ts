@@ -9,7 +9,7 @@ import { map, startWith } from 'rxjs/operators';
 @Component({
   selector: 'app-condition-step',
   templateUrl: './condition-step.component.html',
-  styleUrls: ['./condition-step.component.scss', '../app.component.scss']
+  styleUrls: ['./condition-step.component.scss', '../node-styles.scss']
 })
 export class ConditionStepComponent extends WorkflowNodeBaseClass implements OnInit {
 

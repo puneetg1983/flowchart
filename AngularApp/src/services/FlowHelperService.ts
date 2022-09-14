@@ -55,7 +55,7 @@ export class FlowHelperService {
                 break;
 
             case nodeType.kustoQuery:
-                let dataNodeKustoQuery = this.getNewNode(currentNode, 'kustoQuery');
+                let dataNodeKustoQuery = this.getNewNode(currentNode, 'kustoQuery', "Execute Kusto Query");
                 currentNode.addChild({
                     template: KustoNodeComponent,
                     type: 'kustoQuery',
@@ -66,7 +66,7 @@ export class FlowHelperService {
                 break;
 
             case nodeType.markdown:
-                let dataNodeMarkdown = this.getNewNode(currentNode, 'markdown');
+                let dataNodeMarkdown = this.getNewNode(currentNode, 'markdown', "Display Markdown");
                 currentNode.addChild({
                     template: MarkdownNodeComponent,
                     type: 'markdown',
@@ -86,15 +86,15 @@ export class FlowHelperService {
         let wfNodeData = new workflowNodeData();
         wfNodeData.name = detectorId + idNumber;
         wfNodeData.detectorId = detectorId;
-        wfNodeData.title = wfNodeData.name + "-Title";
+        wfNodeData.title = "Execute a detector";
         return wfNodeData;
     }
 
-    getNewNode(node: NgFlowchartStepComponent<any>, nodeId: string): workflowNodeData {
+    getNewNode(node: NgFlowchartStepComponent<any>, nodeId: string, title:string ): workflowNodeData {
         let idNumber = this.getIdNumberForNode(node, nodeId);
         let wfNodeData = new workflowNodeData();
         wfNodeData.name = nodeId + idNumber;
-        wfNodeData.title = wfNodeData.name + "-Title";
+        wfNodeData.title = title;
         return wfNodeData;
     }
 
@@ -150,12 +150,15 @@ export class FlowHelperService {
         wfNode.children.push(wfIfFalseNode);
 
         let dataNode = new workflowNodeData();
-        let ifDataNode = new workflowNodeData();
-        ifDataNode.name = "iftrue";
+        let ifTrueDataNode = new workflowNodeData();
+        ifTrueDataNode.name = "iftrue";
+        ifTrueDataNode.title = "If True"
 
-        let elseDataNode = new workflowNodeData();
-        elseDataNode.name = "iffalse";
+        let ifFalseDataNode = new workflowNodeData();
+        ifFalseDataNode.name = "iffalse";
+        ifFalseDataNode.title = "If False";
         dataNode.name = "some-condition";
+        dataNode.title = "Condition";
 
         dataNode.completionOptions = this.getVariableCompletionOptions(node);
 
@@ -171,7 +174,7 @@ export class FlowHelperService {
             addedNode.addChild({
                 template: ConditionIftrueStepComponent,
                 type: 'iftrue',
-                data: ifDataNode
+                data: ifTrueDataNode
             }, {
                 sibling: true
             });
@@ -179,7 +182,7 @@ export class FlowHelperService {
             addedNode.addChild({
                 template: ConditionIffalseStepComponent,
                 type: 'iffalse',
-                data: elseDataNode
+                data: ifFalseDataNode
             }, {
                 sibling: true
             });
@@ -201,12 +204,15 @@ export class FlowHelperService {
 
         let switchCaseDataNode = new workflowNodeData();
         switchCaseDataNode.name = "switchCase";
+        switchCaseDataNode.title = "Case";
 
         let switchCaseDefaultDataNode = new workflowNodeData();
         switchCaseDefaultDataNode.name = "switchCaseDefault";
+        switchCaseDefaultDataNode.title = "Default";
 
         let completionOptions = this.getVariableCompletionOptions(node);
         dataNode.name = "switch-condition";
+        dataNode.title="Switch";
         dataNode.completionOptions = completionOptions;
         switchCaseDataNode.completionOptions = completionOptions;;
 
@@ -245,6 +251,7 @@ export class FlowHelperService {
 
         let switchCaseDataNode = new workflowNodeData();
         switchCaseDataNode.name = "switchCase";
+        switchCaseDataNode.title = "Case";
         switchCaseDataNode.completionOptions = this.getVariableCompletionOptions(node);
 
         let switchCaseIndex = switchCondtionNode.children.length - 2;

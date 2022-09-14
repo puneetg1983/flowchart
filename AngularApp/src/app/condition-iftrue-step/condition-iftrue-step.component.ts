@@ -6,7 +6,7 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 @Component({
   selector: 'app-condition-iftrue-step',
   templateUrl: './condition-iftrue-step.component.html',
-  styleUrls: ['./condition-iftrue-step.component.scss', '../app.component.scss']
+  styleUrls: ['./condition-iftrue-step.component.scss', '../node-styles.scss']
 })
 export class ConditionIftrueStepComponent extends WorkflowNodeBaseClass implements OnInit {
 

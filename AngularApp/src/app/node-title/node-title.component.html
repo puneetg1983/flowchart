@@ -1,13 +1,15 @@
-<ng-container *ngIf="!data.isEditingTitle">
-  <h5>{{ data.title }}
-    <i style="float:right" class="fa fa-pencil" aria-hidden="true"
+<div class="flex-div">
+  <div class="node-img d-flex align-items-center justify-content-center" [ngClass]="customClass"><i class="bi"
+      [ngClass]="customClassIcon"></i></div>
+  <div class="ms-2 node-title d-flex align-items-center justify-content-center">
+    <span *ngIf="!data.isEditingTitle">{{data.title }}</span>
+    <input *ngIf="data.isEditingTitle" type="text" [(ngModel)]="data.title" name="cardTitle">
+  </div>
+
+  <div class="filler"></div>
+  <div class="d-flex align-items-center justify-content-center">
+    <i [ngClass]="data.isEditingTitle ? 'fa-save' : 'fa-pencil'" class="fa me-1" aria-hidden="true"
       (click)="data.isEditingTitle = !data.isEditingTitle"></i>
-  </h5>
-</ng-container>
-<ng-container *ngIf="data.isEditingTitle">
-  <h5 class="card-title">
-    <input type="text" [(ngModel)]="data.title" name="cardTitle">
-    <i style="float:right" class="fa fa-save" aria-hidden="true"
-      (click)="data.isEditingTitle = !data.isEditingTitle"></i>
-  </h5>
-</ng-container>
+  </div>
+
+</div>

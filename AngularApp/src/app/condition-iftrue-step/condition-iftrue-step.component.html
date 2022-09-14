@@ -1,19 +1,17 @@
-<div class="condition iftrue" [attr.name]="data.name" #card #canvasContent>
-  <div class="msla-card-title-group" role="button" aria-expanded="true" aria-label="If true" tabindex="0">
-    <div class="msla-image-header">
-      <img style="vertical-align:top" alt="" role="presentation"
-        src="data:image/svg+xml;base64,PHN2ZyB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAzMiAzMiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCiA8cGF0aCBkPSJtMCAwaDMydjMyaC0zMnoiIGZpbGw9IiM4OGRhOGQiLz4NCiA8Zz4NCiAgPHBhdGggZD0ibTI0LjAyNSAxMC4yOTMgMC44ODU2MSAwLjg4NTYxLTEwLjUxOSAxMC41MjktNS40ODA5LTUuNDkwOCAwLjg4NTYxLTAuODg1NjEgNC41OTUzIDQuNTg1NSA5LjYzMzUtOS42MjM2eiIgZmlsbD0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjY3OTQiLz4NCiA8L2c+DQo8L3N2Zz4NCg=="
-        class="msla-card-header-icon" draggable="false">
+<div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card condition">
+  <div class="card-body">
+    <div class="card-title card-title-if">
+      <app-node-title [data]="data" [customClass]="'background-light-green'" [customClassIcon]="'bi-check2'">
+      </app-node-title>
     </div>
-    <a aria-expanded="true" class="msla-card-header-title-view" tabindex="-1" href="javascript:void(0)"
-      draggable="false" role="button">
-      <div class="msla-card-title">If true</div>
-    </a>
+    <div class="card-text">
+      <div class="mt-3">
+        <div class="mb-5">Executes if condition is true</div>
+        <app-node-actions [isConditionNode]="true" (onNodeAdded)="addNode($event)"
+          (onConditionAdded)="addCondition($event)" (onDeleted)="deleteNode()" [isDisabled]="isDisabled()"
+          [isRootNode]="isRootNode()">
+        </app-node-actions>
+      </div>
+    </div>
   </div>
-  <div class="ms-2 mt-4">
-    <app-node-actions [isConditionNode]="true" (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
-      (onDeleted)="deleteNode()" [isDisabled]="isDisabled()" [isRootNode]="isRootNode()">
-    </app-node-actions>
-  </div>
-
 </div>

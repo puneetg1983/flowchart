@@ -6,7 +6,7 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 @Component({
   selector: 'app-switch-case-default-step',
   templateUrl: './switch-case-default-step.component.html',
-  styleUrls: ['./switch-case-default-step.component.scss', '../app.component.scss']
+  styleUrls: ['./switch-case-default-step.component.scss', '../node-styles.scss']
 })
 export class SwitchCaseDefaultStepComponent extends WorkflowNodeBaseClass implements OnInit {
 

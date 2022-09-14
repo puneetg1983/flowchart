@@ -1,7 +1,7 @@
 <div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
     <div class="card-body">
-        <div class="card-title">
-            <app-node-title [data]="data"></app-node-title>
+        <div class="card-title card-title-markdown">
+            <app-node-title [data]="data" [customClass]="'background-green'" [customClassIcon]="'bi-markdown'"></app-node-title>
         </div>
         <h6 class="card-subtitle mb-2 text-muted">{{ data.name }}</h6>
         <div class="card-text">

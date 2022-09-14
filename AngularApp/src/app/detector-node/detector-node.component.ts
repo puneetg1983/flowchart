@@ -6,7 +6,7 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 @Component({
   selector: 'app-detector-node',
   templateUrl: './detector-node.component.html',
-  styleUrls: ['./detector-node.component.scss']
+  styleUrls: ['./detector-node.component.scss', '../node-styles.scss']
 })
 export class DetectorNodeComponent extends WorkflowNodeBaseClass implements OnInit {
 

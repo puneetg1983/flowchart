@@ -8,6 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class NodeTitleComponent implements OnInit {
 
   @Input() data: any;
+  @Input() customClass: string = '';
+  @Input() customClassIcon: string = '';
+
   constructor() { }
 
   ngOnInit(): void {

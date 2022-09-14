@@ -1,7 +1,12 @@
-<div class="card" [attr.name]="data.name" #card #canvasContent>
+<div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
   <div class="card-body">
-    <div class="card-title">Switch ON</div>
-    <app-variable-picker propertyName="switchOnValue" [data]="data"></app-variable-picker>
-    <button type="button" class="btn btn-danger btn-sm" (click)="deleteNode()" mat-button>Delete</button>
+    <div class="card-title card-title-switch">
+      <app-node-title [data]="data" [customClass]="'background-gray'" [customClassIcon]="'bi-toggles'">
+      </app-node-title>
+    </div>
+    <div class="card-text">
+      <app-variable-picker propertyName="switchOnValue" [data]="data"></app-variable-picker>
+      <button type="button" class="btn btn-danger btn-sm" (click)="deleteNode()">Delete</button>
+    </div>
   </div>
 </div>

@@ -1,10 +1,16 @@
-<div class="card case-node" [attr.name]="data.name" #card #canvasContent>
+<div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
     <div class="card-body">
-        <div class="card-title">Default</div>
+      <div class="card-title card-title-switch">
+        <app-node-title [data]="data" [customClass]="'background-gray'" [customClassIcon]="'bi-check2'">
+        </app-node-title>
+      </div>
+      <div class="card-text">
         <div>If no case contains a matching value</div>
+        <div class="mb-5"></div>
         <app-node-actions [isConditionNode]="true" (onNodeAdded)="addNode($event)"
             (onConditionAdded)="addCondition($event)" (onDeleted)="deleteNode()" [isDisabled]="isDisabled()"
             [isRootNode]="isRootNode()">
         </app-node-actions>
+      </div>
     </div>
-</div>
+  </div>

@@ -11,7 +11,7 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 @Component({
   selector: 'app-kusto-node',
   templateUrl: './kusto-node.component.html',
-  styleUrls: ['./kusto-node.component.scss']
+  styleUrls: ['./kusto-node.component.scss', '../node-styles.scss']
 })
 export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit {
 

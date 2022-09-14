@@ -9,7 +9,7 @@ import { WorkflowNodeBaseClass } from '../node-base-class';
 @Component({
   selector: 'app-markdown-node',
   templateUrl: './markdown-node.component.html',
-  styleUrls: ['./markdown-node.component.scss']
+  styleUrls: ['./markdown-node.component.scss', '../node-styles.scss']
 })
 export class MarkdownNodeComponent extends WorkflowNodeBaseClass implements OnInit {
 

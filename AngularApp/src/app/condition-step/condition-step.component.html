@@ -1,25 +1,24 @@
-<div class="condition choose" [attr.name]="data.name" #card #canvasContent>
-  <div class="row">
-    <div class="col-10">
-      <strong>Specify condition</strong>
+<div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
+  <div class="card-body">
+    <div class="card-title card-title-condition">
+      <app-node-title [data]="data" [customClass]="'background-gray'" [customClassIcon]="'bi-braces'"></app-node-title>
     </div>
-    <div class="col"><a href="javascript:void(0)" (click)="deleteNode()">Delete</a></div>
+    <div class="card-text">
+      <div style="display:flex">
+        <app-variable-picker propertyName="ifconditionLeftValue" [data]="data"></app-variable-picker>
+        <select class="ms-2 form-select">
+          <option>eq</option>
+          <option>ne</option>
+          <option>gt</option>
+          <option>lt</option>
+          <option>gte</option>
+          <option>lte</option>
+        </select>
+        <app-variable-picker class="ms-2" propertyName="ifconditionRightValue" [data]="data"></app-variable-picker>
+      </div>
+      <div>
+        <button type="button" class="btn btn-danger btn-sm" (click)="deleteNode()">Delete</button>
+      </div>
+    </div>
   </div>
-  <div class="row mt-2">
-    <div class="col">
-      <app-variable-picker propertyName="ifconditionLeftValue" [data]="data"></app-variable-picker>
-    </div>
-    <div class="col"> <select style="float: left;" class="ms-1">
-        <option>eq</option>
-        <option>ne</option>
-        <option>gt</option>
-        <option>lt</option>
-        <option>gte</option>
-        <option>lte</option>
-      </select> </div>
-    <div class="col">
-      <app-variable-picker propertyName="ifconditionRightValue" [data]="data"></app-variable-picker>
-    </div>
-  </div>
-
 </div>

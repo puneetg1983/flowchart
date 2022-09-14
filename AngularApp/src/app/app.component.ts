@@ -62,16 +62,16 @@ export class AppComponent {
       wfNode.type = "detector";
       wfNode.data.name = this.detectors[0] + "1";
       wfNode.data.detectorId = this.detectors[0];
-      wfNode.data.title = this.detectors[0] + "-Title";
+      wfNode.data.title = "Execute a detector";
 
     } else if (type === nodeType.kustoQuery) {
       wfNode.type = "kustoQuery";
       wfNode.data.name = "kustoQuery1";
-      wfNode.data.title = "kustoQuery1-Title";
+      wfNode.data.title = "Execute Kusto Query";
     } else if (type === nodeType.markdown) {
       wfNode.type = "markdown";
       wfNode.data.name = "markdown1";
-      wfNode.data.title = "markdown1-Title";
+      wfNode.data.title = "Display Markdown";
     }
 
     wfNode.children = [];
