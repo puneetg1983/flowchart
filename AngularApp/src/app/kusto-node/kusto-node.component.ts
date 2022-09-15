@@ -30,9 +30,10 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
   configureKustoQuery() {
     const dialogConfig = this.getNewMatDialogConfig();
     let dialogParams: kustoQueryDialogParams = new kustoQueryDialogParams();
-    dialogParams.queryText = this.data.queryText !== '' ? this.data.queryText : this.defaultQueryText;
+    dialogParams.queryText = this.data.queryText !== '' ? this.decodeString(this.data.queryText) : this.defaultQueryText;
     dialogParams.queryLabel = this.data.queryLabel;
     dialogParams.variables = this.data.variables;
+    dialogParams.kustoQueryColumns = this.data.kustoQueryColumns;
 
     dialogConfig.data = dialogParams;
     this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(modelData => {
@@ -41,6 +42,7 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
         this.data.queryLabel = modelData.queryLabel;
         this.data.queryText = modelData.queryText;
         this.data.variables = this.variables;
+        this.data.kustoQueryColumns = modelData.kustoQueryColumns;
         this.data.completionOptions = this._flowHelperServicePrivate.getVariableCompletionOptions(this);
       }
     });
@@ -78,6 +80,18 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
     dialogConfig.maxHeight = "100%";
     dialogConfig.disableClose = true;
     return dialogConfig;
+  }
+
+  getQueryText(queryText: string) {
+    if (!queryText) {
+      return '(Specify query by clicking the "Configure Kusto Query" button)';
+    }
+    let queryTextPlain = this.decodeString(queryText);
+    return queryTextPlain.length > 100 ? queryTextPlain.substring(0, 100) + '...' : queryTextPlain;
+  }
+
+  decodeString(input: string): string {
+    return Buffer.from(input, 'base64').toString('binary');
   }
 
 }

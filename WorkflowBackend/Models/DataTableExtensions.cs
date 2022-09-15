@@ -40,6 +40,11 @@ namespace WorkflowBackend.Models
             var columns = new List<DataTableResponseColumn>();
             foreach (DataColumn col in table.Columns)
             {
+                if (col.DataType.ToString() == "System.Object")
+                {
+                    throw new InvalidDataException($"Column '{col.ColumnName}' has a complex object type which is not currently supported");
+                }
+
                 columns.Add(new DataTableResponseColumn() { ColumnName = col.ColumnName, DataType = col.DataType.ToString().Replace("System.", "") });
             }
 

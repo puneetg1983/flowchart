@@ -15,35 +15,39 @@ export class KustoQueryDialogComponent implements OnInit {
   // More editor options at https://github.com/Microsoft/vscode/issues/30795#issuecomment-410998882
   editorOptions = { theme: 'vs-dark', language: 'text/plain', minimap: { enabled: false } };
   code: string = '';
-  displayedColumns: DataTableResponseColumn[] = [];
+  kustoQueryColumns: DataTableResponseColumn[] = [];
   dataSource: any[] = [];
   variables: stepVariable[] = [];
+  variablesInMemoryCopy: stepVariable[] = [];
   isExecutingQuery: boolean = false;
   error: string = '';
   kustoQueryLabel: string = 'ThisStepKustoQueryLabel';
+  variablesChanged: boolean = false;
 
   constructor(@Inject(MAT_DIALOG_DATA) data: kustoQueryDialogParams, public dialogRef: MatDialogRef<KustoQueryDialogComponent>,
     private _kustoService: KustoService) {
-    this.code = decodeURI(data.queryText);
+    this.code = data.queryText;
     if (data.queryLabel) {
       this.kustoQueryLabel = data.queryLabel;
     }
 
     this.variables = data.variables;
+    this.variablesInMemoryCopy = JSON.parse(JSON.stringify(data.variables));
   }
 
   ngOnInit(): void {
   }
 
   close() {
-    this.dialogRef.close({ queryText: '', variables: [] });
+    this.dialogRef.close(null);
   }
 
   save() {
     let dialogResult: kustoQueryDialogParams = {
-      queryText: encodeURI(this.code),
-      variables: this.variables,
-      queryLabel: this.kustoQueryLabel
+      queryText: this.encodeString(this.code),
+      variables: this.variablesInMemoryCopy,
+      queryLabel: this.kustoQueryLabel,
+      kustoQueryColumns: this.kustoQueryColumns
     };
 
     this.dialogRef.close(dialogResult);
@@ -63,15 +67,16 @@ export class KustoQueryDialogComponent implements OnInit {
     this.isExecutingQuery = true;
     this._kustoService.execute(kustoQuery).subscribe(resp => {
       this.isExecutingQuery = false;
-      this.displayedColumns = [];
+      this.kustoQueryColumns = [];
       resp.body.columns.forEach(entry => {
-        this.displayedColumns.push(entry);
+        this.kustoQueryColumns.push(entry);
       })
 
+      this.dataSource = [];
       for (var i = 0; i < resp.body.rows.length; i++) {
         let obj = {};
         for (var j = 0; j < resp.body.rows[i].length; j++) {
-          obj[this.displayedColumns[j].columnName] = resp.body.rows[i][j];
+          obj[this.kustoQueryColumns[j].columnName] = resp.body.rows[i][j];
         }
         this.dataSource.push(obj);
       }
@@ -86,12 +91,12 @@ export class KustoQueryDialogComponent implements OnInit {
     });
   }
 
-  clickCell(rowIndex: number, col: DataTableResponseColumn) {
+  clickCell(rowIndex: number, col: DataTableResponseColumn, element: any) {
     let value = "this.rows[" + rowIndex + "]['" + col.columnName + "']";
     let name = this.kustoQueryLabel + '_Row' + rowIndex + '_' + col.columnName;
 
     const newVariableArray: stepVariable[] = [];
-    this.variables.forEach(element => {
+    this.variablesInMemoryCopy.forEach(element => {
       newVariableArray.push(element);
     })
 
@@ -99,20 +104,35 @@ export class KustoQueryDialogComponent implements OnInit {
       newVariableArray.push({
         name: name,
         value: value,
-        type: col.dataType
+        type: col.dataType,
+        runtimeValue: element[col.columnName]
       });
     }
 
-    this.variables = [...newVariableArray]; // refresh the dataSource
+    this.variablesInMemoryCopy = [...newVariableArray]; // refresh the dataSource
   }
 
-  getColumnNames(displayedColumns: DataTableResponseColumn[]): string[] {
+  getColumnNames(kustoQueryColumns: DataTableResponseColumn[]): string[] {
     let colNames: string[] = [];
-    displayedColumns.forEach(col => {
+    kustoQueryColumns.forEach(col => {
       colNames.push(col.columnName);
     });
 
     return colNames;
+  }
+
+  encodeString(input: string): string {
+    return Buffer.from(input).toString('base64');
+  }
+
+  updateVariables(variables: stepVariable[]) {
+    this.variablesInMemoryCopy = variables;
+    if (this.variables.length != this.variablesInMemoryCopy.length) {
+      this.variablesChanged = true;
+      return;
+    }
+
+    this.variablesChanged = JSON.stringify(this.variables) === JSON.stringify(this.variablesInMemoryCopy);
   }
 
 }

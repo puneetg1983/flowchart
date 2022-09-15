@@ -3,7 +3,8 @@
     <tr>
       <th>Name</th>
       <th>DataType</th>
-      <th>Value</th>
+      <th>Expression</th>
+      <th>Current Value</th>
       <th colspan="2">Action</th>
     </tr>
   </thead>
@@ -12,21 +13,23 @@
       <td>{{ v.name }}</td>
       <td>{{ v.type }}</td>
       <td>{{ v.value }}</td>
-      <td><a href="javascript:void(0)" (click)="edit(idx)">Edit</a></td>
+      <td>{{ v.runtimeValue }}</td>
+      <td><a href="javascript:void(0)" class="disabled-link" (click)="false && edit(idx)">Edit</a></td>
       <td><a href="javascript:void(0)" (click)="delete(idx)">Delete</a></td>
     </tr>
   </tbody>
 </table>
 
 <div class="mb-3">
-  <button class="btn btn-primary btn-sm" (click)="addNew()">Add new variable</button>
+  <button class="btn btn-primary btn-sm" (click)="addNew()" [disabled]="true">Add new variable</button>
 </div>
 
 <form *ngIf="isEditing">
   <div class="mb-3">
     <label for="varName" class="form-label">Enter Variable name</label>
     <input type="text" name="taVarName" class="form-control form-control-sm" id="varName"
-      aria-label="Enter variable name" [(ngModel)]="currentVariable.name" placeholder="Enter variable name">
+      aria-label="Enter variable name" [(ngModel)]="currentVariable.name" placeholder="Enter variable name"
+      [disabled]="editIndex != -1">
     <div id="variableHelp" class="form-text">Create custom variables that can be used either in current step or child
       steps</div>
   </div>
@@ -41,14 +44,15 @@
 
   <div class="mb-3">
     <label for="varValue" class="form-label">Enter Variable value</label>
-    <input type="text" name="varValue" class="form-control form-control-sm" id="varValue" (keyup)="onVariableChange($event)"
-      aria-label="Enter variable name" [(ngModel)]="currentVariable.value" placeholder="Enter variable name">
+    <input type="text" name="varValue" class="form-control form-control-sm" id="varValue"
+      (keyup)="onVariableChange($event)" aria-label="Enter variable name" [(ngModel)]="currentVariable.value"
+      placeholder="Enter variable name">
     <div *ngIf="variableHasError">
       <app-error-message [error]="errorMessage"></app-error-message>
     </div>
   </div>
 
   <div class="mb-3">
-    <button class="btn btn-primary btn-sm" (click)="add()">Save variable</button>
+    <button class="btn btn-primary btn-sm" (click)="save()">Save variable</button>
   </div>
 </form>

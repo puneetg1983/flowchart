@@ -11,7 +11,7 @@ const swalWithBootstrapButtons = Swal.mixin({
       cancelButton: 'btn btn-danger'
     },
     buttonsStyling: false
-  })
+  });
 
 export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
     constructor(private _flowHelperService: FlowHelperService) {

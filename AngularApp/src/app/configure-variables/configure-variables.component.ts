@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { KustoService } from 'src/services/KustoService';
 import { stepVariable } from '../models/workflowNode';
 
 const regex: RegExp = /this\.rows\[(\d+)]\['(\w+)'\]/gm
@@ -15,41 +14,47 @@ export class ConfigureVariablesComponent implements OnInit {
   @Output() onVariablesSaved = new EventEmitter<stepVariable[]>();
 
   currentVariable: stepVariable = new stepVariable();
-  dataTypes: string[] = ['String', 'Int32', 'Double', 'DateTime'];
+  dataTypes: string[] = ['String', 'Int32', 'Int64', 'Double', 'DateTime'];
   isEditing: boolean = false;
   variableHasError: boolean = false;
   errorMessage = "Variable names should be of the format this.rows[0]['ColumnName']";
-
+  editIndex = -1;
   constructor() {
   }
 
   ngOnInit(): void {
   }
 
-  add() {
-    this.variables.push(this.currentVariable);
+  save() {
+    let idx = this.variables.findIndex(x => x.name === this.currentVariable.name);
+    if (idx === -1) {
+      this.variables.push(this.currentVariable);
+    } else {
+      this.variables[idx] = this.currentVariable;
+    }
+
+    this.editIndex = -1;
     this.isEditing = false;
+    this.onVariablesSaved.emit(this.variables);
   }
 
   addNew() {
+    this.editIndex = -1;
     this.currentVariable = new stepVariable();
     this.currentVariable.name = 'CustomVariableForThisStep';
     this.currentVariable.value = 'this.rows[0][\'ColumnName\']';
     this.isEditing = true;
   }
 
-  save() {
+  delete(idx: number) {
+    this.variables.splice(idx, 1);
     this.onVariablesSaved.emit(this.variables);
   }
 
   edit(idx: number) {
     this.isEditing = true;
+    this.editIndex = idx;
     this.currentVariable = this.variables[idx];
-
-  }
-
-  delete(idx: number) {
-    this.variables.splice(idx, 1);
   }
 
   onVariableChange(event: any) {

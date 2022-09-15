@@ -1,3 +1,5 @@
+import { DataTableResponseColumn } from "src/services/KustoService";
+
 export enum nodeStatus {
   critical = 'critical',
   warning = 'warning',
@@ -30,6 +32,7 @@ export class stepVariable {
   name: string = '';
   type: string = 'String';
   value: string = '';
+  runtimeValue: any;
 }
 
 export class workflowNodeData {
@@ -42,6 +45,7 @@ export class workflowNodeData {
   isEditingTitle: boolean = false;
   queryText: string = '';
   queryLabel: string = '';
+  kustoQueryColumns: DataTableResponseColumn[] = [];
   variables: stepVariable[] = [];
   markdownText: string = '';
   completionOptions: stepVariable[] = [];

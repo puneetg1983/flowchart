@@ -10,6 +10,8 @@ namespace WorkflowBackend.Controllers
     [ApiController]
     public class KustoController : ControllerBase
     {
+        private const int MaxKustoRowsAllowed = 10;
+        private const int MaxKustoColumnsAllowed = 10;
         private readonly IKustoService _kustoService;
 
         public KustoController(IKustoService kustoService)
@@ -38,11 +40,21 @@ namespace WorkflowBackend.Controllers
                     return Ok();
                 }
 
+                if(result.Rows.Count > MaxKustoRowsAllowed 
+                    || result.Columns.Count > MaxKustoColumnsAllowed)
+                {
+                    return BadRequest($"Workflow nodes are not data dumps so you shouldn't be writing queries that are returning more than {MaxKustoRowsAllowed} rows of data and {MaxKustoColumnsAllowed} number of columns. Please optimize your query accordingly.");
+                }
+
                 return Ok(result.ToDataTableResponseObject());
             }
             catch (SemanticException kustoEx)
             {
                 return BadRequest(kustoEx.SemanticErrors);
+            }
+            catch (InvalidDataException invalidData)
+            {
+                return BadRequest(invalidData.Message);
             }
             catch (Exception)
             {

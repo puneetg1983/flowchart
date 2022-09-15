@@ -1,17 +1,20 @@
 <div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
   <div class="card-body">
     <div class="card-title card-title-kusto">
-      <app-node-title [data]="data" [customClass]="'background-purple'" [customClassIcon]="'bi-graph-up-arrow'"></app-node-title>
+      <app-node-title [data]="data" [customClass]="'background-purple'" [customClassIcon]="'bi-graph-up-arrow'">
+      </app-node-title>
     </div>
 
-    <h6 class="card-subtitle mb-2 text-muted">{{ data.name }}</h6>
     <div class="card-text">
+      <pre class="kusto-query mt-1">
+{{ getQueryText(data.queryText) }}
+        </pre>
 
-      <div class="mt-2 mb-2">
-        <button class="btn btn-primary btn-sm" (click)="configureKustoQuery()">Configure
-          Kusto Query
-        </button>
-      </div>
+      <span class="badge bg-primary">{{ data.variables.length }} </span> <small class="ms-1 me-2">variables</small>
+      <button class="btn btn-primary btn-sm" (click)="configureKustoQuery()">Configure
+        Kusto Query
+      </button>
+
       <app-common-node-properties [data]="data"></app-common-node-properties>
       <app-node-actions (onNodeAdded)="addNode($event)" (onConditionAdded)="addCondition($event)"
         (onDeleted)="deleteNode()" [isDisabled]="isDisabled()" [isRootNode]="isRootNode()">
