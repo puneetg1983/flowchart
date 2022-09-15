@@ -204,7 +204,7 @@ export class FlowHelperService {
 
         let switchCaseDataNode = new workflowNodeData();
         switchCaseDataNode.name = "switchCase";
-        switchCaseDataNode.title = "Case";
+        switchCaseDataNode.title = "Case Equals";
 
         let switchCaseDefaultDataNode = new workflowNodeData();
         switchCaseDefaultDataNode.name = "switchCaseDefault";

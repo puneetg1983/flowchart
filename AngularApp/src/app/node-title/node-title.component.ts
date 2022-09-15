@@ -10,6 +10,7 @@ export class NodeTitleComponent implements OnInit {
   @Input() data: any;
   @Input() customClass: string = '';
   @Input() customClassIcon: string = '';
+  @Input() disableEdit: boolean = false;
 
   constructor() { }
 

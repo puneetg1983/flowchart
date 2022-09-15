@@ -13,7 +13,7 @@ const swalWithBootstrapButtons = Swal.mixin({
     buttonsStyling: false
   });
 
-export class WorkflowNodeBaseClass extends NgFlowchartStepComponent {
+export class WorkflowNodeBaseClass extends NgFlowchartStepComponent<workflowNodeData> {
     constructor(private _flowHelperService: FlowHelperService) {
         super();
     }

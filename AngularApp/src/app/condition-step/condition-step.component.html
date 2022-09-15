@@ -1,7 +1,8 @@
 <div [attr.name]="data.name" #canvasContent ngFlowchartCanvas class="card">
   <div class="card-body">
     <div class="card-title card-title-condition">
-      <app-node-title [data]="data" [customClass]="'background-gray'" [customClassIcon]="'bi-braces'"></app-node-title>
+      <app-node-title [data]="data" [disableEdit]="true" [customClass]="'background-gray'"
+        [customClassIcon]="'bi-braces'"></app-node-title>
     </div>
     <div class="card-text">
       <div style="display:flex">
