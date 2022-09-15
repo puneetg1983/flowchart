@@ -9,6 +9,7 @@ export interface kustoQuery {
     DatabaseName: string;
     QueryText: string;
     OperationName: string;
+    Variables:any;
 }
 
 export interface DataTableResponseObject {

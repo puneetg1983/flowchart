@@ -34,6 +34,7 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
     dialogParams.queryLabel = this.data.queryLabel;
     dialogParams.variables = this.data.variables;
     dialogParams.kustoQueryColumns = this.data.kustoQueryColumns;
+    dialogParams.completionOptions = this._flowHelperServicePrivate.getVariableCompletionOptions(this);
 
     dialogConfig.data = dialogParams;
     this.matDialog.open(KustoQueryDialogComponent, dialogConfig).afterClosed().subscribe(modelData => {
@@ -43,7 +44,6 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
         this.data.queryText = modelData.queryText;
         this.data.variables = this.variables;
         this.data.kustoQueryColumns = modelData.kustoQueryColumns;
-        this.data.completionOptions = this._flowHelperServicePrivate.getVariableCompletionOptions(this);
       }
     });
   }
@@ -91,7 +91,7 @@ export class KustoNodeComponent extends WorkflowNodeBaseClass implements OnInit 
   }
 
   decodeString(input: string): string {
-    return Buffer.from(input, 'base64').toString('binary');
+    return atob(input);
   }
 
 }

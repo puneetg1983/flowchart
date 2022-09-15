@@ -8,5 +8,6 @@
         public string QueryText { get; set; } = "";
         public string OperationName { get; set; } = "TestOperation";
         public string? EndTime { get; set; }
+        public List<StepVariable> Variables { get; set; } = new List<StepVariable>();
     }
 }

@@ -6,4 +6,5 @@ export class kustoQueryDialogParams {
   queryText: string;
   variables: stepVariable[];
   kustoQueryColumns: DataTableResponseColumn[];
+  completionOptions: stepVariable[] = [];
 }

@@ -23,9 +23,11 @@ export class KustoQueryDialogComponent implements OnInit {
   error: string = '';
   kustoQueryLabel: string = 'ThisStepKustoQueryLabel';
   variablesChanged: boolean = false;
+  inputKustoQueryDialogParams: kustoQueryDialogParams;
 
   constructor(@Inject(MAT_DIALOG_DATA) data: kustoQueryDialogParams, public dialogRef: MatDialogRef<KustoQueryDialogComponent>,
     private _kustoService: KustoService) {
+    this.inputKustoQueryDialogParams = data;
     this.code = data.queryText;
     if (data.queryLabel) {
       this.kustoQueryLabel = data.queryLabel;
@@ -47,7 +49,8 @@ export class KustoQueryDialogComponent implements OnInit {
       queryText: this.encodeString(this.code),
       variables: this.variablesInMemoryCopy,
       queryLabel: this.kustoQueryLabel,
-      kustoQueryColumns: this.kustoQueryColumns
+      kustoQueryColumns: this.kustoQueryColumns,
+      completionOptions: this.inputKustoQueryDialogParams.completionOptions
     };
 
     this.dialogRef.close(dialogResult);
@@ -60,7 +63,8 @@ export class KustoQueryDialogComponent implements OnInit {
       OperationName: 'TestOperation',
       QueryText: this.code,
       StartTime: '',
-      EndTime: ''
+      EndTime: '',
+      Variables: this.inputKustoQueryDialogParams.completionOptions
     };
 
     this.error = '';
@@ -122,7 +126,7 @@ export class KustoQueryDialogComponent implements OnInit {
   }
 
   encodeString(input: string): string {
-    return Buffer.from(input).toString('base64');
+    return btoa(input);
   }
 
   updateVariables(variables: stepVariable[]) {

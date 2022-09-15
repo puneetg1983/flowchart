@@ -1,6 +1,7 @@
 ﻿using Kusto.Data.Exceptions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using WorkflowBackend.Models;
 using WorkflowBackend.Services;
 
@@ -24,13 +25,18 @@ namespace WorkflowBackend.Controllers
         public async Task<IActionResult> Execute([FromBody] KustoCallBody body)
         {
             GetDateTimes(body.StartTime, body.EndTime, out DateTime startDateTime, out DateTime endDateTime);
+            string queryText = ParseVariables(body.QueryText, body.Variables);
+            if (queryText.Contains("{{") || queryText.Contains("}}"))
+            {
+                return BadRequest("Query is contain some variables that we couldn't parse. Please check the query text");
+            }
 
             try
             {
                 var result = await _kustoService.ExecuteQueryAsync(
                 body.ClusterName,
                 body.DatabaseName,
-                body.QueryText,
+                queryText,
                 body.OperationName,
                 startDateTime,
                 endDateTime);
@@ -40,7 +46,7 @@ namespace WorkflowBackend.Controllers
                     return Ok();
                 }
 
-                if(result.Rows.Count > MaxKustoRowsAllowed 
+                if (result.Rows.Count > MaxKustoRowsAllowed
                     || result.Columns.Count > MaxKustoColumnsAllowed)
                 {
                     return BadRequest($"Workflow nodes are not data dumps so you shouldn't be writing queries that are returning more than {MaxKustoRowsAllowed} rows of data and {MaxKustoColumnsAllowed} number of columns. Please optimize your query accordingly.");
@@ -52,6 +58,10 @@ namespace WorkflowBackend.Controllers
             {
                 return BadRequest(kustoEx.SemanticErrors);
             }
+            catch (KustoClientException kustoClientEx)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, kustoClientEx.Message);
+            }
             catch (InvalidDataException invalidData)
             {
                 return BadRequest(invalidData.Message);
@@ -60,7 +70,18 @@ namespace WorkflowBackend.Controllers
             {
                 throw;
             }
-            
+
+        }
+
+        private string ParseVariables(string queryText, List<StepVariable> variables)
+        {
+            foreach (var variable in variables)
+            {
+                string expression = "{{" + variable.name + "}}";
+                queryText = queryText.Replace(expression, variable.runtimeValue);
+            }
+
+            return queryText;
         }
 
         private static void GetDateTimes(string? startTime, string? endTime, out DateTime startDateTime, out DateTime endDateTime)

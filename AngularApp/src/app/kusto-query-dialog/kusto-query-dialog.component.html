@@ -10,7 +10,32 @@
                     id="idQueryLabel" placeholder="Enter label for the Kusto Query">
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-2 mt-2" *ngIf="inputKustoQueryDialogParams.completionOptions && inputKustoQueryDialogParams.completionOptions.length > 0">
+            <div class="col-2">
+                <label class="form-label">Other Step variables</label>
+            </div>
+            <div class="col-10">
+                <table class="table table-bordered table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>DataType</th>
+                            <th>Expression</th>
+                            <th>Current Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let v of inputKustoQueryDialogParams.completionOptions">
+                            <td>{{ v.name }}</td>
+                            <td>{{ v.type }}</td>
+                            <td>{{ v.value }}</td>
+                            <td>{{ v.runtimeValue }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mb-2 mt-2">
             <div class="col-2">
                 <label for="idQueryLabel" class="form-label">Enter query text</label>
             </div>
@@ -27,15 +52,16 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-2 mt-2">
             <div class="col-2">
-                Kusto Query Output
+                <label class="form-label">Kusto Query Output</label>
             </div>
             <div class="col-10 border border-primary" style="min-height:300px">
                 <table *ngIf="dataSource.length > 0" class="mt-3 table table-bordered table-responsive">
                     <thead>
                         <tr>
-                            <th *ngFor="let disCol of kustoQueryColumns; let colIndex = index">{{disCol.columnName}}</th>
+                            <th *ngFor="let disCol of kustoQueryColumns; let colIndex = index">{{disCol.columnName}}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,22 +70,22 @@
                                 *ngFor="let disCol of kustoQueryColumns; let colIndex = index">
                                 {{ element[disCol.columnName] }}
                             </td>
-
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <div class="row mt-5">
+        <div class="row mb-2 mt-5">
             <div class="col-2">
-                Configure Variables
+                <label class="form-label">Configure Variables</label>
             </div>
             <div class="col-10">
                 <span> Variables allow you to set conditions in subsequent steps. After executing the Kusto query, click
                     on any of the cells in the query output to create a variable.
                 </span>
                 <div class="mt-3 mb-3">
-                    <app-configure-variables [variables]="variablesInMemoryCopy" (onVariablesSaved)="updateVariables($event)"></app-configure-variables>
+                    <app-configure-variables [variables]="variablesInMemoryCopy"
+                        (onVariablesSaved)="updateVariables($event)"></app-configure-variables>
                 </div>
             </div>
         </div>
