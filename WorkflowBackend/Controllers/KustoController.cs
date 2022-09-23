@@ -24,6 +24,11 @@ namespace WorkflowBackend.Controllers
         [HttpOptions("execute")]
         public async Task<IActionResult> Execute([FromBody] KustoCallBody body)
         {
+            if (string.IsNullOrEmpty(body.QueryText))
+            {
+                return BadRequest("QueryText is null or empty");
+            }
+
             GetDateTimes(body.StartTime, body.EndTime, out DateTime startDateTime, out DateTime endDateTime);
             string queryText = ParseVariables(body.QueryText, body.Variables);
             if (queryText.Contains("{{") || queryText.Contains("}}"))
@@ -34,10 +39,10 @@ namespace WorkflowBackend.Controllers
             try
             {
                 var result = await _kustoService.ExecuteQueryAsync(
-                body.ClusterName,
-                body.DatabaseName,
+                body.ClusterName ?? "wawseas",
+                body.DatabaseName ?? "wawsprod",
                 queryText,
-                body.OperationName,
+                body.OperationName ?? "TestOperation",
                 startDateTime,
                 endDateTime);
 
@@ -73,8 +78,13 @@ namespace WorkflowBackend.Controllers
 
         }
 
-        private string ParseVariables(string queryText, List<StepVariable> variables)
+        private string ParseVariables(string queryText, List<StepVariable>? variables)
         {
+            if (variables == null || variables.Count == 0)
+            {
+                return queryText;
+            }
+
             foreach (var variable in variables)
             {
                 string expression = "{{" + variable.name + "}}";

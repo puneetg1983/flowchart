@@ -3,11 +3,11 @@
     public class KustoCallBody
     {
         public string? StartTime { get; set; }
-        public string ClusterName { get; set; } = "wawswus";
-        public string DatabaseName { get; set; } = "wawsprod";
-        public string QueryText { get; set; } = "";
-        public string OperationName { get; set; } = "TestOperation";
+        public string? ClusterName { get; set; }
+        public string? DatabaseName { get; set; }
+        public string? QueryText { get; set; }
+        public string? OperationName { get; set; } 
         public string? EndTime { get; set; }
-        public List<StepVariable> Variables { get; set; } = new List<StepVariable>();
+        public List<StepVariable>? Variables { get; set; }
     }
 }
